@@ -492,6 +492,37 @@
         word-break: break-all;
       }
 
+      .credentials-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
+        margin-top: 12px;
+      }
+
+      .copy-btn {
+        margin-top: 10px;
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--text-2);
+        padding: 8px 10px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 13px;
+      }
+      .copy-btn.copied {
+        background: var(--accent);
+        color: #fff;
+        border-color: var(--accent);
+      }
+
+      .secret-note {
+        margin-top: 12px;
+        font-size: 13px;
+        color: var(--text-2);
+        max-width: 640px;
+      }
+
       /* Loading spinner */
       .spinner {
         width: 16px;
@@ -699,7 +730,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-              Enter a valid URL (must start with https://)
+              Invalid application URL
             </span>
           </div>
 
@@ -728,7 +759,7 @@
                   stroke-linecap="round"
                 />
               </svg>
-              Enter a valid redirect URI (must start with https://)
+              Invalid redirect URL
             </span>
           </div>
 
@@ -784,10 +815,23 @@
             Your OAuth application has been successfully registered with the
             OIDC provider.
           </p>
-          <div class="client-id-box" id="clientIdBox">
-            <div class="cid-label">Client ID</div>
-            <div class="cid-value" id="clientIdVal">—</div>
+
+          <div class="credentials-grid">
+            <div class="client-id-box">
+              <div class="cid-label">Client ID</div>
+              <div class="cid-value" id="clientIdVal">—</div>
+              <button class="copy-btn" data-target="clientIdVal" aria-label="Copy client id">Copy</button>
+            </div>
+
+            <div class="client-id-box">
+              <div class="cid-label">Client Secret <span style="color:var(--danger);font-weight:600">(one-time)</span></div>
+              <div class="cid-value" id="clientSecretVal">—</div>
+              <button class="copy-btn" data-target="clientSecretVal" aria-label="Copy client secret">Copy</button>
+            </div>
           </div>
+
+          <p class="secret-note">This secret is shown only once. Copy and store it securely — it cannot be recovered later.</p>
+
           <button
             class="btn btn-ghost"
             style="margin-top: 4px"
@@ -862,7 +906,7 @@
       function isValidUrl(str) {
         try {
           const u = new URL(str);
-          return u.protocol === "https:";
+          return !!u.hostname;
         } catch {
           return false;
         }
@@ -875,19 +919,61 @@
 
       function validateStep(step) {
         if (step === 1) {
-          const name = document.getElementById("appName").value.trim();
-          const desc = document.getElementById("appDesc").value.trim();
-          const nameOk = name.length > 0 && name.length <= 50;
-          const descOk = desc.length > 0 && desc.length <= 200;
+          const nameEl = document.getElementById("appName");
+          const descEl = document.getElementById("appDesc");
+          const name = nameEl.value.trim();
+          const desc = descEl.value.trim();
+
+          const nameOk = name.length >= 3 && name.length <= 50;
+          const descOk = desc.length >= 10 && desc.length <= 200;
+
+          if (!nameOk) {
+            const msg = name.length < 3
+              ? "Application name must be at least 3 characters"
+              : "Application name must be at most 50 characters";
+            document.getElementById("appNameErr").textContent = msg;
+          } else {
+            document.getElementById("appNameErr").textContent =
+              "Name is required (max 50 chars)";
+          }
+
+          if (!descOk) {
+            const msg = desc.length < 10
+              ? "Application description must be at least 10 characters"
+              : "Application description must be at most 200 characters";
+            document.getElementById("appDescErr").textContent = msg;
+          } else {
+            document.getElementById("appDescErr").textContent =
+              "Description is required (max 200 chars)";
+          }
+
           setError("appName", "appNameErr", !nameOk);
           setError("appDesc", "appDescErr", !descOk);
           return nameOk && descOk;
         }
+
         if (step === 2) {
           const appUrl = document.getElementById("appUrl").value.trim();
           const redir = document.getElementById("redirectUrl").value.trim();
           const appOk = isValidUrl(appUrl);
           const redOk = isValidUrl(redir);
+
+          if (!appOk) {
+            document.getElementById("appUrlErr").textContent =
+              "Invalid application URL";
+          } else {
+            document.getElementById("appUrlErr").textContent =
+              "";
+          }
+
+          if (!redOk) {
+            document.getElementById("redirectUrlErr").textContent =
+              "Invalid redirect URL";
+          } else {
+            document.getElementById("redirectUrlErr").textContent =
+              "";
+          }
+
           setError("appUrl", "appUrlErr", !appOk);
           setError("redirectUrl", "redirectUrlErr", !redOk);
           return appOk && redOk;
@@ -1000,18 +1086,28 @@
         document.getElementById("apiError").classList.remove("visible");
 
         try {
-          const res = await fetch("/api/oidc/clients", {
+          const res = await fetch("/client/register", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(payload),
           });
 
+          const json = await res.json().catch(() => ({}));
           if (!res.ok) {
-            const err = await res.json().catch(() => ({}));
-            throw new Error(err.message || `Server responded ${res.status}`);
+            if (json && json.error) {
+              throw { _structured: true, payload: json.error };
+            }
+            const msg =
+              json.message || (json.data && json.data.message) ||
+              `Server responded ${res.status}`;
+            throw new Error(msg);
           }
 
-          const data = await res.json();
+          const body = json.data || json;
+          const clientId =
+            body.clientId || body.client_id || (body.data && (body.data.clientId || body.data.client_id));
+          const clientSecret =
+            body.clientSecret || body.client_secret || (body.data && (body.data.clientSecret || body.data.client_secret)) || '';
 
           // Hide form, show success
           for (let i = 1; i <= TOTAL_STEPS; i++) {
@@ -1022,19 +1118,118 @@
           document.getElementById("progressFill").style.width = "100%";
           document.getElementById("successScreen").classList.add("visible");
           document.getElementById("clientIdVal").textContent =
-            data.clientId || data.client_id || "(see your dashboard)";
+            clientId || "(see your dashboard)";
+          document.getElementById("clientSecretVal").textContent =
+            clientSecret || "(see your dashboard)";
+
+          // enable copy buttons
+          initCopyButtons();
 
           // Update left panel
           document
             .querySelectorAll("#stepList .step-item")
             .forEach((li) => (li.className = "step-item done"));
         } catch (e) {
-          document.getElementById("apiErrorText").textContent =
-            e.message || "Something went wrong.";
-          document.getElementById("apiError").classList.add("visible");
+          // If we received a parsed JSON error object, handle structured errors
+          if (e && e._structured) {
+            const err = e.payload;
+            const code = err.code;
+            const message = err.message || "Something went wrong.";
+            const details = Array.isArray(err.details) ? err.details : [];
+
+            // Reset field errors
+            setError("appName", "appNameErr", false);
+            setError("appDesc", "appDescErr", false);
+            setError("appUrl", "appUrlErr", false);
+            setError("redirectUrl", "redirectUrlErr", false);
+
+            if (code === "BAD_REQUEST" || code === "INVALID_REQUEST") {
+              // details expected as [{ path: ['applicationName'], message: '...' }, ...]
+              details.forEach((d) => {
+                const path = Array.isArray(d.path) ? d.path[0] : d.path;
+                const msg = d.message || "Invalid";
+                if (path === "applicationName" || path === "application_name") {
+                  document.getElementById("appNameErr").textContent = msg;
+                  setError("appName", "appNameErr", true);
+                } else if (path === "applicationDescription" || path === "application_description") {
+                  document.getElementById("appDescErr").textContent = msg;
+                  setError("appDesc", "appDescErr", true);
+                } else if (path === "applicationUrl" || path === "application_url") {
+                  document.getElementById("appUrlErr").textContent = msg;
+                  setError("appUrl", "appUrlErr", true);
+                } else if (path === "redirectUrl" || path === "redirect_url") {
+                  document.getElementById("redirectUrlErr").textContent = msg;
+                  setError("redirectUrl", "redirectUrlErr", true);
+                }
+              });
+              document.getElementById("apiErrorText").textContent = message;
+              document.getElementById("apiError").classList.add("visible");
+            } else if (code === "CONFLICT") {
+              // Common conflict: duplicate application name / url / redirect
+              document.getElementById("apiErrorText").textContent = message;
+              document.getElementById("apiError").classList.add("visible");
+              // try to highlight name field if message mentions name
+              if (/(name|application name)/i.test(message)) {
+                setError("appName", "appNameErr", true);
+                document.getElementById("appNameErr").textContent = message;
+              }
+            } else {
+              document.getElementById("apiErrorText").textContent = message;
+              document.getElementById("apiError").classList.add("visible");
+            }
+          } else {
+            document.getElementById("apiErrorText").textContent =
+              (e && e.message) || "Something went wrong.";
+            document.getElementById("apiError").classList.add("visible");
+          }
+
           btn.disabled = false;
           if (sp) sp.classList.remove("visible");
         }
+      }
+
+      // Copy helper
+      function initCopyButtons() {
+        document.querySelectorAll('.copy-btn').forEach((btn) => {
+          btn.addEventListener('click', async (ev) => {
+            const t = ev.currentTarget;
+            const id = t.getAttribute('data-target');
+            if (!id) return;
+            const el = document.getElementById(id);
+            if (!el) return;
+            const text = el.textContent || '';
+            try {
+              await navigator.clipboard.writeText(text);
+              t.classList.add('copied');
+              const prev = t.textContent;
+              t.textContent = 'Copied';
+              setTimeout(() => {
+                t.classList.remove('copied');
+                t.textContent = prev;
+              }, 1600);
+            } catch {
+              // fallback
+              const range = document.createRange();
+              range.selectNodeContents(el);
+              const sel = window.getSelection();
+              sel.removeAllRanges();
+              sel.addRange(range);
+              try {
+                document.execCommand('copy');
+                t.classList.add('copied');
+                const prev = t.textContent;
+                t.textContent = 'Copied';
+                setTimeout(() => {
+                  t.classList.remove('copied');
+                  t.textContent = prev;
+                }, 1600);
+              } catch {
+                alert('Copy failed — please copy manually');
+              }
+              sel.removeAllRanges();
+            }
+          });
+        });
       }
 
       // Init
