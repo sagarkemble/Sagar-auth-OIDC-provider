@@ -1,0 +1,1044 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Register OAuth Client — Sagar Auth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #09090b;
+        --surface: #18181b;
+        --surface2: #27272a;
+        --border: #3f3f46;
+        --border-focus: #7c3aed;
+        --muted: #71717a;
+        --text: #fafafa;
+        --text-2: #a1a1aa;
+        --accent: #7c3aed;
+        --accent-h: #6d28d9;
+        --accent-glow: rgba(124, 58, 237, 0.35);
+        --danger: #f87171;
+        --success: #34d399;
+        --radius: 10px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "DM Sans", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        overflow: hidden;
+      }
+
+      /* Background noise + subtle gradient */
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 20% 10%,
+            rgba(124, 58, 237, 0.12) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 50% at 80% 90%,
+            rgba(109, 40, 217, 0.08) 0%,
+            transparent 55%
+          );
+        pointer-events: none;
+      }
+
+      .card {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 420px 1fr;
+        width: 100%;
+        max-width: 900px;
+        min-height: 560px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 18px;
+        overflow: hidden;
+        box-shadow:
+          0 32px 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      /* ───── LEFT PANEL ───── */
+      .panel-left {
+        position: relative;
+        background: linear-gradient(
+          160deg,
+          #1a0533 0%,
+          #0d0d1a 50%,
+          #0a0a14 100%
+        );
+        display: flex;
+        flex-direction: column;
+        padding: 36px 36px 40px;
+        overflow: hidden;
+      }
+
+      .panel-left::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 120% 70% at 50% 110%,
+            rgba(124, 58, 237, 0.25) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle 200px at 10% 20%,
+            rgba(139, 92, 246, 0.12) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+
+      .logo {
+        font-family: "Syne", sans-serif;
+        font-weight: 800;
+        font-size: 22px;
+        letter-spacing: -0.5px;
+        color: #fff;
+        z-index: 1;
+      }
+      .logo span {
+        color: var(--accent);
+      }
+
+      /* geometric grid lines decorative */
+      .grid-lines {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 0.06;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
+      .panel-left .step-visual {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        z-index: 1;
+        padding-top: 32px;
+      }
+
+      .step-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .step-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        transition: background 0.25s;
+      }
+      .step-item.active {
+        background: rgba(124, 58, 237, 0.18);
+      }
+      .step-item.done {
+        opacity: 0.55;
+      }
+      .step-item.pending {
+        opacity: 0.35;
+      }
+
+      .step-num {
+        width: 28px;
+        height: 28px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        border: 1.5px solid var(--border);
+        display: grid;
+        place-items: center;
+        font-family: "DM Mono", monospace;
+        font-size: 12px;
+        color: var(--muted);
+        transition: all 0.25s;
+      }
+      .step-item.active .step-num {
+        border-color: var(--accent);
+        color: var(--accent);
+        box-shadow: 0 0 12px var(--accent-glow);
+      }
+      .step-item.done .step-num {
+        background: var(--accent);
+        border-color: var(--accent);
+        color: #fff;
+      }
+
+      .step-label {
+        font-size: 13px;
+        font-weight: 500;
+      }
+      .step-sub {
+        font-size: 11px;
+        color: var(--text-2);
+        margin-top: 2px;
+      }
+
+      .tagline {
+        margin-top: 36px;
+        font-family: "Syne", sans-serif;
+        font-size: 20px;
+        font-weight: 700;
+        line-height: 1.3;
+        color: rgba(255, 255, 255, 0.9);
+        z-index: 1;
+      }
+      .tagline span {
+        color: #a78bfa;
+      }
+
+      /* ───── RIGHT PANEL ───── */
+      .panel-right {
+        padding: 44px 48px 44px;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg);
+      }
+
+      .form-header {
+        margin-bottom: 32px;
+      }
+
+      .form-header h1 {
+        font-family: "Syne", sans-serif;
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1.1;
+      }
+      .form-header p {
+        margin-top: 8px;
+        font-size: 13.5px;
+        color: var(--text-2);
+        line-height: 1.55;
+      }
+
+      /* Progress bar */
+      .progress-track {
+        height: 2px;
+        background: var(--surface2);
+        border-radius: 99px;
+        margin-bottom: 32px;
+        overflow: hidden;
+      }
+      .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, var(--accent), #a78bfa);
+        border-radius: 99px;
+        transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+
+      /* Form steps */
+      .form-step {
+        display: none;
+        flex-direction: column;
+        gap: 20px;
+        flex: 1;
+      }
+      .form-step.active {
+        display: flex;
+        animation: fadeUp 0.3s ease;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* Field */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+
+      label {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text-2);
+        letter-spacing: 0.02em;
+      }
+
+      input,
+      textarea {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        color: var(--text);
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        padding: 11px 14px;
+        outline: none;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        resize: none;
+        width: 100%;
+      }
+      input::placeholder,
+      textarea::placeholder {
+        color: var(--muted);
+      }
+
+      input:focus,
+      textarea:focus {
+        border-color: var(--border-focus);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+      }
+
+      input.error,
+      textarea.error {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.15);
+      }
+
+      .error-msg {
+        font-size: 11.5px;
+        color: var(--danger);
+        display: none;
+        align-items: center;
+        gap: 4px;
+      }
+      .error-msg.visible {
+        display: flex;
+      }
+
+      textarea {
+        min-height: 88px;
+        line-height: 1.55;
+      }
+
+      /* Char counter */
+      .field-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .char-count {
+        font-size: 11px;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+      }
+      .char-count.warn {
+        color: var(--danger);
+      }
+
+      /* URL hint badge */
+      .input-wrapper {
+        position: relative;
+      }
+      .url-prefix {
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 13px;
+        color: var(--muted);
+        font-family: "DM Mono", monospace;
+        pointer-events: none;
+        user-select: none;
+      }
+      .input-wrapper input {
+        padding-left: 14px;
+      }
+
+      /* Buttons */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 11px 22px;
+        border-radius: var(--radius);
+        font-family: "DM Sans", sans-serif;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+      }
+      .btn-primary:hover:not(:disabled) {
+        background: var(--accent-h);
+        box-shadow: 0 0 20px var(--accent-glow);
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-2);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        background: var(--surface2);
+        color: var(--text);
+      }
+
+      .btn svg {
+        flex-shrink: 0;
+      }
+
+      .actions {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+        margin-top: auto;
+        padding-top: 24px;
+      }
+
+      /* Success screen */
+      .success-screen {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        text-align: center;
+        gap: 16px;
+        animation: fadeUp 0.4s ease;
+      }
+      .success-screen.visible {
+        display: flex;
+      }
+
+      .success-icon {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: rgba(52, 211, 153, 0.15);
+        border: 1.5px solid rgba(52, 211, 153, 0.35);
+        display: grid;
+        place-items: center;
+        color: var(--success);
+        font-size: 26px;
+      }
+      .success-screen h2 {
+        font-family: "Syne", sans-serif;
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .success-screen p {
+        font-size: 13.5px;
+        color: var(--text-2);
+        max-width: 320px;
+        line-height: 1.6;
+      }
+
+      .client-id-box {
+        width: 100%;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 14px 16px;
+        text-align: left;
+      }
+      .client-id-box .cid-label {
+        font-size: 11px;
+        color: var(--muted);
+        margin-bottom: 4px;
+        letter-spacing: 0.05em;
+        text-transform: uppercase;
+      }
+      .client-id-box .cid-value {
+        font-family: "DM Mono", monospace;
+        font-size: 13px;
+        color: var(--accent);
+        word-break: break-all;
+      }
+
+      /* Loading spinner */
+      .spinner {
+        width: 16px;
+        height: 16px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: none;
+      }
+      .spinner.visible {
+        display: block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* API error banner */
+      .api-error {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: rgba(248, 113, 113, 0.08);
+        border: 1px solid rgba(248, 113, 113, 0.25);
+        border-radius: 8px;
+        font-size: 13px;
+        color: var(--danger);
+        margin-bottom: 4px;
+      }
+      .api-error.visible {
+        display: flex;
+      }
+
+      @media (max-width: 760px) {
+        .card {
+          grid-template-columns: 1fr;
+          max-width: 460px;
+        }
+        .panel-left {
+          display: none;
+        }
+        .panel-right {
+          padding: 36px 28px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <!-- LEFT -->
+      <div class="panel-left">
+        <div class="grid-lines"></div>
+        <div class="logo">Sagar<span>Auth</span></div>
+
+        <div class="step-visual">
+          <ul class="step-list" id="stepList">
+            <li class="step-item active" data-step="1">
+              <div class="step-num">1</div>
+              <div>
+                <div class="step-label">App Identity</div>
+                <div class="step-sub">Name &amp; description</div>
+              </div>
+            </li>
+            <li class="step-item pending" data-step="2">
+              <div class="step-num">2</div>
+              <div>
+                <div class="step-label">Endpoints</div>
+                <div class="step-sub">URLs &amp; redirect</div>
+              </div>
+            </li>
+            <li class="step-item pending" data-step="3">
+              <div class="step-num">3</div>
+              <div>
+                <div class="step-label">Review</div>
+                <div class="step-sub">Confirm &amp; register</div>
+              </div>
+            </li>
+          </ul>
+
+          <p class="tagline">Register your app with <span>Sagar Auth</span>.</p>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div class="panel-right">
+        <div class="form-header">
+          <h1 id="stepTitle">App Identity</h1>
+          <p id="stepDesc">
+            Give your OAuth client a name and a short description so users know
+            what they're authorizing.
+          </p>
+        </div>
+
+        <div class="progress-track">
+          <div class="progress-fill" id="progressFill" style="width: 33%"></div>
+        </div>
+
+        <div class="api-error" id="apiError">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+            <path
+              d="M7.5 1.5a6 6 0 1 0 0 12 6 6 0 0 0 0-12ZM7 5h1v4H7V5Zm0 5h1v1H7v-1Z"
+              fill="currentColor"
+            />
+          </svg>
+          <span id="apiErrorText">Something went wrong. Please try again.</span>
+        </div>
+
+        <!-- STEP 1 -->
+        <div class="form-step active" id="step1">
+          <div class="field">
+            <label for="appName"
+              >Application name
+              <span style="color: var(--danger)">*</span></label
+            >
+            <input
+              type="text"
+              id="appName"
+              maxlength="50"
+              placeholder="My Awesome App"
+              autocomplete="off"
+            />
+            <div class="field-meta">
+              <span class="error-msg" id="appNameErr">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="currentColor"
+                >
+                  <circle cx="6" cy="6" r="5" opacity=".2" />
+                  <path
+                    d="M6 3.5v3M6 8.5v.5"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Name is required (max 50 chars)
+              </span>
+              <span class="char-count" id="appNameCount">0/50</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="appDesc"
+              >Application description
+              <span style="color: var(--danger)">*</span></label
+            >
+            <textarea
+              id="appDesc"
+              maxlength="200"
+              placeholder="Briefly describe what your application does and why users should trust it…"
+            ></textarea>
+            <div class="field-meta">
+              <span class="error-msg" id="appDescErr">
+                <svg
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="currentColor"
+                >
+                  <circle cx="6" cy="6" r="5" opacity=".2" />
+                  <path
+                    d="M6 3.5v3M6 8.5v.5"
+                    stroke="currentColor"
+                    stroke-width="1.2"
+                    stroke-linecap="round"
+                  />
+                </svg>
+                Description is required (max 200 chars)
+              </span>
+              <span class="char-count" id="appDescCount">0/200</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 2 -->
+        <div class="form-step" id="step2">
+          <div class="field">
+            <label for="appUrl"
+              >Application URL
+              <span style="color: var(--danger)">*</span></label
+            >
+            <input
+              type="url"
+              id="appUrl"
+              placeholder="https://myapp.example.com"
+              autocomplete="off"
+            />
+            <span class="error-msg" id="appUrlErr">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="currentColor"
+              >
+                <circle cx="6" cy="6" r="5" opacity=".2" />
+                <path
+                  d="M6 3.5v3M6 8.5v.5"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Enter a valid URL (must start with https://)
+            </span>
+          </div>
+
+          <div class="field">
+            <label for="redirectUrl"
+              >Redirect URI <span style="color: var(--danger)">*</span></label
+            >
+            <input
+              type="url"
+              id="redirectUrl"
+              placeholder="https://myapp.example.com/auth/callback"
+              autocomplete="off"
+            />
+            <span class="error-msg" id="redirectUrlErr">
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+                fill="currentColor"
+              >
+                <circle cx="6" cy="6" r="5" opacity=".2" />
+                <path
+                  d="M6 3.5v3M6 8.5v.5"
+                  stroke="currentColor"
+                  stroke-width="1.2"
+                  stroke-linecap="round"
+                />
+              </svg>
+              Enter a valid redirect URI (must start with https://)
+            </span>
+          </div>
+
+          <div
+            style="
+              background: var(--surface);
+              border: 1px solid var(--border);
+              border-radius: 10px;
+              padding: 14px 16px;
+              font-size: 12.5px;
+              color: var(--text-2);
+              line-height: 1.6;
+            "
+          >
+            <span style="color: var(--accent); font-weight: 600">ℹ Tip —</span>
+            The redirect URI must exactly match what you register in your OIDC
+            flow. Wildcards and fragments are not allowed.
+          </div>
+        </div>
+
+        <!-- STEP 3 — Review -->
+        <div class="form-step" id="step3">
+          <div style="display: flex; flex-direction: column; gap: 10px">
+            <p
+              style="
+                font-size: 12.5px;
+                color: var(--text-2);
+                margin-bottom: 4px;
+              "
+            >
+              Review your details before submitting.
+            </p>
+
+            <div
+              id="reviewCard"
+              style="
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                overflow: hidden;
+              "
+            >
+              <!-- rows injected by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- SUCCESS -->
+        <div class="success-screen" id="successScreen">
+          <div class="success-icon">✓</div>
+          <h2>Client registered!</h2>
+          <p>
+            Your OAuth application has been successfully registered with the
+            OIDC provider.
+          </p>
+          <div class="client-id-box" id="clientIdBox">
+            <div class="cid-label">Client ID</div>
+            <div class="cid-value" id="clientIdVal">—</div>
+          </div>
+          <button
+            class="btn btn-ghost"
+            style="margin-top: 4px"
+            onclick="location.reload()"
+          >
+            Register another app
+          </button>
+        </div>
+
+        <!-- ACTIONS -->
+        <div class="actions" id="actions">
+          <button
+            class="btn btn-ghost"
+            id="btnBack"
+            onclick="goBack()"
+            style="display: none"
+          >
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            Back
+          </button>
+          <button class="btn btn-primary" id="btnNext" onclick="goNext()">
+            Continue
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const TOTAL_STEPS = 3;
+      let currentStep = 1;
+
+      const titles = ["App Identity", "Endpoints", "Review & Register"];
+      const descs = [
+        "Give your OAuth client a name and a short description so users know what they're authorizing.",
+        "Provide the base URL for your application and the redirect URI for the authorization callback.",
+        "Everything look good? Submit to register your client and receive credentials.",
+      ];
+
+      // ── Char counters ──
+      function wireCounter(inputId, countId, max) {
+        const el = document.getElementById(inputId);
+        const ct = document.getElementById(countId);
+        el.addEventListener("input", () => {
+          const len = el.value.length;
+          ct.textContent = `${len}/${max}`;
+          ct.classList.toggle("warn", len > max * 0.85);
+        });
+      }
+      wireCounter("appName", "appNameCount", 50);
+      wireCounter("appDesc", "appDescCount", 200);
+
+      // ── Validation helpers ──
+      function isValidUrl(str) {
+        try {
+          const u = new URL(str);
+          return u.protocol === "https:";
+        } catch {
+          return false;
+        }
+      }
+
+      function setError(inputId, errId, show) {
+        document.getElementById(inputId).classList.toggle("error", show);
+        document.getElementById(errId).classList.toggle("visible", show);
+      }
+
+      function validateStep(step) {
+        if (step === 1) {
+          const name = document.getElementById("appName").value.trim();
+          const desc = document.getElementById("appDesc").value.trim();
+          const nameOk = name.length > 0 && name.length <= 50;
+          const descOk = desc.length > 0 && desc.length <= 200;
+          setError("appName", "appNameErr", !nameOk);
+          setError("appDesc", "appDescErr", !descOk);
+          return nameOk && descOk;
+        }
+        if (step === 2) {
+          const appUrl = document.getElementById("appUrl").value.trim();
+          const redir = document.getElementById("redirectUrl").value.trim();
+          const appOk = isValidUrl(appUrl);
+          const redOk = isValidUrl(redir);
+          setError("appUrl", "appUrlErr", !appOk);
+          setError("redirectUrl", "redirectUrlErr", !redOk);
+          return appOk && redOk;
+        }
+        return true;
+      }
+
+      // ── Navigation ──
+      function updateUI() {
+        // Steps display
+        for (let i = 1; i <= TOTAL_STEPS; i++) {
+          const el = document.getElementById(`step${i}`);
+          if (el) el.classList.toggle("active", i === currentStep);
+        }
+        // Left panel step list
+        document.querySelectorAll("#stepList .step-item").forEach((li) => {
+          const s = +li.dataset.step;
+          li.className =
+            "step-item " +
+            (s === currentStep
+              ? "active"
+              : s < currentStep
+                ? "done"
+                : "pending");
+        });
+        // Progress bar
+        document.getElementById("progressFill").style.width =
+          `${(currentStep / TOTAL_STEPS) * 100}%`;
+        // Title
+        document.getElementById("stepTitle").textContent =
+          titles[currentStep - 1];
+        document.getElementById("stepDesc").textContent =
+          descs[currentStep - 1];
+        // Buttons
+        document.getElementById("btnBack").style.display =
+          currentStep > 1 ? "inline-flex" : "none";
+        const btn = document.getElementById("btnNext");
+        if (currentStep === TOTAL_STEPS) {
+          btn.innerHTML = `Submit <div class="spinner" id="btnSpinner"></div><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        } else {
+          btn.innerHTML = `Continue <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>`;
+        }
+      }
+
+      function buildReview() {
+        const rows = [
+          {
+            label: "App Name",
+            value: document.getElementById("appName").value.trim(),
+          },
+          {
+            label: "Description",
+            value: document.getElementById("appDesc").value.trim(),
+          },
+          {
+            label: "Application URL",
+            value: document.getElementById("appUrl").value.trim(),
+          },
+          {
+            label: "Redirect URI",
+            value: document.getElementById("redirectUrl").value.trim(),
+          },
+        ];
+        const card = document.getElementById("reviewCard");
+        card.innerHTML = rows
+          .map(
+            (r, i) => `
+      <div style="display:flex;flex-direction:column;gap:3px;padding:13px 16px;${i < rows.length - 1 ? "border-bottom:1px solid var(--border)" : ""}">
+        <span style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">${r.label}</span>
+        <span style="font-size:13.5px;word-break:break-all;color:var(--text);font-family:${r.value.startsWith("https") ? "'DM Mono', monospace" : "inherit"};font-size:${r.value.startsWith("https") ? "12px" : "13.5px"}">${r.value}</span>
+      </div>
+    `,
+          )
+          .join("");
+      }
+
+      function goNext() {
+        if (!validateStep(currentStep)) return;
+        if (currentStep < TOTAL_STEPS) {
+          currentStep++;
+          if (currentStep === TOTAL_STEPS) buildReview();
+          updateUI();
+        } else {
+          submitForm();
+        }
+      }
+
+      function goBack() {
+        if (currentStep > 1) {
+          currentStep--;
+          updateUI();
+        }
+      }
+
+      // ── Submit ──
+      async function submitForm() {
+        const payload = {
+          applicationName: document.getElementById("appName").value.trim(),
+          applicationDescription: document
+            .getElementById("appDesc")
+            .value.trim(),
+          applicationUrl: document.getElementById("appUrl").value.trim(),
+          redirectUrl: document.getElementById("redirectUrl").value.trim(),
+        };
+
+        const btn = document.getElementById("btnNext");
+        btn.disabled = true;
+        const sp = document.getElementById("btnSpinner");
+        if (sp) sp.classList.add("visible");
+        document.getElementById("apiError").classList.remove("visible");
+
+        try {
+          const res = await fetch("/api/oidc/clients", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload),
+          });
+
+          if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.message || `Server responded ${res.status}`);
+          }
+
+          const data = await res.json();
+
+          // Hide form, show success
+          for (let i = 1; i <= TOTAL_STEPS; i++) {
+            const el = document.getElementById(`step${i}`);
+            if (el) el.classList.remove("active");
+          }
+          document.getElementById("actions").style.display = "none";
+          document.getElementById("progressFill").style.width = "100%";
+          document.getElementById("successScreen").classList.add("visible");
+          document.getElementById("clientIdVal").textContent =
+            data.clientId || data.client_id || "(see your dashboard)";
+
+          // Update left panel
+          document
+            .querySelectorAll("#stepList .step-item")
+            .forEach((li) => (li.className = "step-item done"));
+        } catch (e) {
+          document.getElementById("apiErrorText").textContent =
+            e.message || "Something went wrong.";
+          document.getElementById("apiError").classList.add("visible");
+          btn.disabled = false;
+          if (sp) sp.classList.remove("visible");
+        }
+      }
+
+      // Init
+      updateUI();
+    </script>
+  </body>
+</html>
