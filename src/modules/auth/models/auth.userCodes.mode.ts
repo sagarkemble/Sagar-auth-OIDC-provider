@@ -21,8 +21,9 @@ const userCodesTable = pgTable("user_codes", {
   authorizationCode: text("authorization_code"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
   authorizationCodeExpiresAt: timestamp("authorization_code_expires_at"),
-  updatedAt: timestamp("updated_at"),
-  createdAt: timestamp("created_at"),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export default userCodesTable;

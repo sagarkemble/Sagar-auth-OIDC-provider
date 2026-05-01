@@ -1,4 +1,4 @@
-import { pgTable, uuid, varchar, text } from "drizzle-orm/pg-core";
+import { pgTable, uuid, varchar, text, timestamp } from "drizzle-orm/pg-core";
 
 const clientTable = pgTable("clients", {
   id: uuid("id").primaryKey().defaultRandom().notNull(),
@@ -12,6 +12,10 @@ const clientTable = pgTable("clients", {
   applicationUrl: text("application_url").notNull().unique(),
   clientId: text("client_id").notNull(),
   clientSecret: text("client_secret").notNull(),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export default clientTable;

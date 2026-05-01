@@ -28,8 +28,9 @@ const usersTable = pgTable("users", {
     "email_verification_token_expires_at",
   ),
   isVerified: boolean("is_verified").default(false),
-  updatedAt: timestamp("updated_at"),
-  createdAt: timestamp("created_at"),
+
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
 export default usersTable;
