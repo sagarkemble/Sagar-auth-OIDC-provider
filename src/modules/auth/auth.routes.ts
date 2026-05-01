@@ -5,6 +5,7 @@ import * as authController from "./auth.controller";
 import verifyEmailDto from "./dto/verify-email.dto";
 import { verifyClientId } from "./auth.middleware";
 import loginDto from "./dto/login.dto";
+import generateTokenDto from "./dto/generateToken.dto";
 
 export const authRouter = router();
 
@@ -22,3 +23,10 @@ authRouter.post(
   authController.login,
 );
 authRouter.get("/verify-email", authController.getVerifyEmail);
+authRouter.post(
+  "/token",
+  verifyClientId,
+  validateDto(generateTokenDto),
+  authController.generateToken,
+);
+authRouter.get("/userinfo", authController.getUserInfo);

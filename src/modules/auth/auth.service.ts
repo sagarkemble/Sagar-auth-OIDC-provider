@@ -6,7 +6,20 @@ import * as bcryptUtils from "../../common/utils/bcrypt";
 import * as cryptoUtils from "../../common/utils/crypto";
 import { sendVerificationEmail } from "./auth.email.service";
 import userCodesTable from "./models/auth.userCodes.model";
+import JWT from "jsonwebtoken";
+import { PRIVATE_KEY, PUBLIC_KEY } from "../../common/utils/cert";
+import clientTable from "../client/client.model";
 
+interface JWTClaims {
+  sub: string;
+  email: string;
+  email_verified: string;
+  given_name: string;
+  family_name: string;
+  name: string;
+  picture: string;
+}
+const ISSUER = process.env.SERVER_URL;
 const register = async function (
   firstName: string,
   lastName: string,
@@ -92,4 +105,82 @@ const login = async function (
   return authorizationCode;
 };
 
-export { register, verifyEmail, login };
+const generateTokens = async function (
+  authorizationCode: string,
+  clientSecret: string,
+) {
+  const hashedAuthorizationCode =
+    await cryptoUtils.hashContent(authorizationCode);
+  const [userCodeEntry] = await db
+    .select()
+    .from(userCodesTable)
+    .where(eq(userCodesTable.authorizationCode, hashedAuthorizationCode));
+  if (
+    !userCodeEntry ||
+    Date.now() > Number(userCodeEntry.authorizationCodeExpiresAt)
+  )
+    throw ApiError.badRequest("Invalid or expired authorization code");
+
+  const hashedClientSecret = await cryptoUtils.hashContent(clientSecret);
+  const [client] = await db
+    .select()
+    .from(clientTable)
+    .where(eq(clientTable.clientSecret, hashedClientSecret));
+  if (!client) throw ApiError.unauthorized("Invalid client secret");
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, userCodeEntry.userId));
+  if (!user) throw ApiError.notFound("User not found");
+  const claims = {
+    iss: ISSUER,
+    sub: user.id,
+    email: user.email,
+    email_verified: String(user.isVerified),
+    exp: Math.floor(Date.now() / 1000) + 15 * 60,
+    given_name: user.firstName,
+    family_name: user.lastName,
+    name: `${user.firstName} ${user.lastName}`,
+    picture: user.avatarUrl,
+  };
+  const accessToken = JWT.sign(claims, PRIVATE_KEY, { algorithm: "RS256" });
+  const { token: refreshToken, hashedToken: hashedRefreshToken } =
+    await cryptoUtils.generateHash();
+  const refreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  await db
+    .update(userCodesTable)
+    .set({
+      refreshToken: hashedRefreshToken,
+      refreshTokenExpiresAt,
+    })
+    .where(eq(userCodesTable.authorizationCode, hashedAuthorizationCode));
+  return { accessToken, refreshToken };
+};
+
+const getUserInfo = async function (accessToken: string) {
+  let claims: JWTClaims;
+  try {
+    claims = JWT.verify(accessToken, PUBLIC_KEY, {
+      algorithms: ["RS256"],
+    }) as JWTClaims;
+  } catch {
+    throw ApiError.unauthorized("Invalid access token");
+  }
+
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, claims.sub));
+  if (!user) throw ApiError.notFound("User not found");
+  return {
+    sub: user.id,
+    email: user.email,
+    email_verified: String(user.isVerified),
+    given_name: user.firstName,
+    family_name: user.lastName,
+    name: `${user.firstName} ${user.lastName}`,
+    picture: user.avatarUrl,
+  };
+};
+
+export { register, verifyEmail, login, generateTokens, getUserInfo };

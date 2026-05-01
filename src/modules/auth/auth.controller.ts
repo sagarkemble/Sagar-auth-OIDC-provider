@@ -2,6 +2,7 @@ import type { Request, Response } from "express";
 import * as AuthService from "./auth.service";
 import ApiResponse from "../../common/utils/api-response.utils";
 import path from "path";
+import ApiError from "../../common/utils/api-error.utils";
 
 const register = async function (req: Request, res: Response) {
   const {
@@ -59,4 +60,31 @@ const login = async function (req: Request, res: Response) {
   );
 };
 
-export { register, getRegister, verifyEmail, getVerifyEmail, login };
+const generateToken = async function (req: Request, res: Response) {
+  const { authorizationCode, clientSecret } = req.body;
+  const { accessToken, refreshToken } = await AuthService.generateTokens(
+    authorizationCode,
+    clientSecret,
+  );
+  ApiResponse.ok(res, "Tokens generated successfully.", {
+    accessToken,
+    refreshToken,
+  });
+};
+
+const getUserInfo = async function (req: Request, res: Response) {
+  const accessToken = req.headers.authorization?.split(" ")[1];
+  if (!accessToken) throw ApiError.unauthorized("Access token missing");
+  const userInfo = await AuthService.getUserInfo(accessToken);
+  ApiResponse.ok(res, "User info retrieved successfully.", userInfo);
+};
+
+export {
+  register,
+  getRegister,
+  verifyEmail,
+  getVerifyEmail,
+  login,
+  generateToken,
+  getUserInfo,
+};
