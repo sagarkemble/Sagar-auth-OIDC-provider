@@ -4,22 +4,27 @@ import usersTable from "./models/auth.users.model";
 import ApiError from "../../common/utils/api-error.utils";
 import * as bcryptUtils from "../../common/utils/bcrypt";
 import * as cryptoUtils from "../../common/utils/crypto";
-import { sendVerificationEmail } from "./auth.email.service";
+import {
+  sendForgotPasswordEmail,
+  sendVerificationEmail,
+} from "./auth.email.service";
 import userCodesTable from "./models/auth.userCodes.model";
 import JWT from "jsonwebtoken";
 import { PRIVATE_KEY, PUBLIC_KEY } from "../../common/utils/cert";
 import clientTable from "../client/client.model";
 
+const ISSUER = process.env.SERVER_URL;
 interface JWTClaims {
+  iss: string;
   sub: string;
   email: string;
   email_verified: string;
+  exp: number;
   given_name: string;
   family_name: string;
   name: string;
   picture: string;
 }
-const ISSUER = process.env.SERVER_URL;
 const register = async function (
   firstName: string,
   lastName: string,
@@ -233,6 +238,44 @@ const refreshToken = async function (
   return { accessToken, refreshToken };
 };
 
+const forgotPassword = async function (email: string) {
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.email, email));
+  if (!user) throw ApiError.notFound("User not found");
+  const { token, hashedToken } = await cryptoUtils.generateHash();
+  await db
+    .update(usersTable)
+    .set({
+      passwordResetTokenExpiresAt: new Date(Date.now() + 15 * 60 * 1000),
+      passwordResetToken: hashedToken,
+    })
+    .where(eq(usersTable.email, email));
+  await sendForgotPasswordEmail(email, token);
+};
+
+const resetPassword = async function (token: string, newPassword: string) {
+  const hashedToken = await cryptoUtils.hashContent(token);
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.passwordResetToken, hashedToken));
+
+  if (!user || !user.passwordResetToken) {
+    throw ApiError.badRequest("Invalid or expired token");
+  }
+  const hashedPassword = await bcryptUtils.hashContent(newPassword);
+  await db
+    .update(usersTable)
+    .set({
+      password: hashedPassword,
+      passwordResetToken: null,
+      passwordResetTokenExpiresAt: null,
+    })
+    .where(eq(usersTable.passwordResetToken, hashedToken));
+};
+
 export {
   register,
   verifyEmail,
@@ -240,4 +283,6 @@ export {
   generateTokens,
   getUserInfo,
   refreshToken,
+  forgotPassword,
+  resetPassword,
 };

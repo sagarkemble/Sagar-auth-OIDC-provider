@@ -88,6 +88,25 @@ const refreshToken = async function (req: Request, res: Response) {
     refreshToken: newRefreshToken,
   });
 };
+const getResetPassword = async function (req: Request, res: Response) {
+  const emailHtmlPath = path.resolve("public", "html", "change-password.html");
+  ApiResponse.html(res, emailHtmlPath, "success");
+};
+
+const forgotPassword = async function (req: Request, res: Response) {
+  const { email } = req.body;
+  await AuthService.forgotPassword(email);
+  ApiResponse.ok(
+    res,
+    "If an account with that email exists, a password reset link has been sent.",
+  );
+};
+
+const resetPassword = async function (req: Request, res: Response) {
+  const { token, password } = req.body;
+  await AuthService.resetPassword(token, password);
+  ApiResponse.ok(res, "Password reset successful");
+};
 
 export {
   register,
@@ -98,4 +117,7 @@ export {
   generateToken,
   getUserInfo,
   refreshToken,
+  getResetPassword,
+  resetPassword,
+  forgotPassword,
 };

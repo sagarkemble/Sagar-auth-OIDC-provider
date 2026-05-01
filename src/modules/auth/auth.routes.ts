@@ -6,6 +6,9 @@ import verifyEmailDto from "./dto/verify-email.dto";
 import { verifyClientId } from "./auth.middleware";
 import loginDto from "./dto/login.dto";
 import generateTokenDto from "./dto/generateToken.dto";
+import forgetPasswordDto from "./dto/forgot-password.dto";
+import resetPasswordDto from "./dto/reset-password.dto";
+import refreshTokenDto from "./dto/refreshToken.dto";
 
 export const authRouter = router();
 
@@ -34,6 +37,18 @@ authRouter.get("/userinfo", authController.getUserInfo);
 
 authRouter.post(
   "/refresh-token",
-  validateDto(generateTokenDto),
+  validateDto(refreshTokenDto),
   authController.refreshToken,
+);
+authRouter.post(
+  "/forgot-password",
+  validateDto(forgetPasswordDto),
+  authController.forgotPassword,
+);
+
+authRouter.get("/reset-password", authController.getResetPassword);
+authRouter.post(
+  "/reset-password",
+  validateDto(resetPasswordDto),
+  authController.resetPassword,
 );
