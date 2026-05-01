@@ -239,7 +239,7 @@ async function submitRegistration() {
       avatarUrl: selectedAvatarUrl,
     };
 
-    const res = await fetch("/api/auth/register", {
+    const res = await fetch("/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -247,10 +247,23 @@ async function submitRegistration() {
       body: JSON.stringify(payload),
     });
 
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.message || `Error ${res.status}`);
+    const data = await res.json();
 
-    // Success
+    if (!res.ok) {
+      // Handle error response format: { success: false, error: { code, message, status, details } }
+      const errorMessage = data.error?.message || data.message || `Error ${res.status}`;
+      const errorDetails = data.error?.details || [];
+
+      // If there are validation details, show them
+      if (errorDetails.length > 0) {
+        const detailMessages = errorDetails.map(d => d.message || d).join(", ");
+        throw new Error(detailMessages);
+      }
+
+      throw new Error(errorMessage);
+    }
+
+    // Success response format: { success: true, code: "CREATED", status: 201, message, data: { authorizationCode } }
     form.hideForm();
     document.getElementById("successScreen").classList.add("visible");
     document.getElementById("successEmail").textContent = document.getElementById("email").value.trim();

@@ -2,7 +2,7 @@ import { eq, or } from "drizzle-orm";
 import db from "../../common/config/db.config";
 import clientTable from "./client.model";
 import ApiError from "../../common/utils/api-error.utils";
-import { generateCryptoHash } from "../../common/utils/crypto";
+import * as cryptoUtils from "../../common/utils/crypto";
 
 const register = async function (
   applicationName: string,
@@ -26,9 +26,9 @@ const register = async function (
     );
 
   const { token: clientId, hashedToken: hashedClientId } =
-    await generateCryptoHash();
+    await cryptoUtils.generateHash();
   const { token: clientSecret, hashedToken: hashedClientSecret } =
-    await generateCryptoHash();
+    await cryptoUtils.generateHash();
 
   const [newClient] = await db
     .insert(clientTable)
@@ -41,7 +41,7 @@ const register = async function (
       clientSecret: hashedClientSecret,
     })
     .returning();
-  return newClient;
+  return { clientId, clientSecret };
 };
 
 export { register };

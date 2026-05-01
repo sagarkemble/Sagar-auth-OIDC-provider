@@ -5,4 +5,9 @@ const hashContent = async function (content: string) {
   return hashedContent;
 };
 
-export { hashContent };
+const compareHash = async function (content: string, hash: string) {
+  const isMatch = await bcrypt.compare(content, hash);
+  return isMatch;
+};
+
+export { hashContent, compareHash };
