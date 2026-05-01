@@ -29,4 +29,11 @@ authRouter.post(
   validateDto(generateTokenDto),
   authController.generateToken,
 );
+
 authRouter.get("/userinfo", authController.getUserInfo);
+
+authRouter.post(
+  "/refresh-token",
+  validateDto(generateTokenDto),
+  authController.refreshToken,
+);

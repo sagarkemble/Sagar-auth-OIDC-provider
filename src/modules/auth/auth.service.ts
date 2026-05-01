@@ -183,4 +183,61 @@ const getUserInfo = async function (accessToken: string) {
   };
 };
 
-export { register, verifyEmail, login, generateTokens, getUserInfo };
+const refreshToken = async function (
+  refreshToken: string,
+  clientSecret: string,
+) {
+  const hashedRefreshToken = await cryptoUtils.hashContent(refreshToken);
+  const hashedClientSecret = await cryptoUtils.hashContent(clientSecret);
+  const [client] = await db
+    .select()
+    .from(clientTable)
+    .where(eq(clientTable.clientSecret, hashedClientSecret));
+  if (!client) throw ApiError.unauthorized("Invalid client secret");
+  const [userCodeEntry] = await db
+    .select()
+    .from(userCodesTable)
+    .where(eq(userCodesTable.refreshToken, hashedRefreshToken));
+  if (
+    !userCodeEntry ||
+    Date.now() > Number(userCodeEntry.refreshTokenExpiresAt)
+  )
+    throw ApiError.unauthorized("Invalid or expired refresh token");
+  const [user] = await db
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.id, userCodeEntry.userId));
+  if (!user) throw ApiError.notFound("User not found");
+  const claims = {
+    iss: ISSUER,
+    sub: user.id,
+    email: user.email,
+    email_verified: String(user.isVerified),
+    exp: Math.floor(Date.now() / 1000) + 15 * 60,
+    given_name: user.firstName,
+    family_name: user.lastName,
+    name: `${user.firstName} ${user.lastName}`,
+    picture: user.avatarUrl,
+  };
+  const accessToken = JWT.sign(claims, PRIVATE_KEY, { algorithm: "RS256" });
+  const { token: newRefreshToken, hashedToken: hashedNewRefreshToken } =
+    await cryptoUtils.generateHash();
+  const refreshTokenExpiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
+  await db
+    .update(userCodesTable)
+    .set({
+      refreshToken: hashedNewRefreshToken,
+      refreshTokenExpiresAt,
+    })
+    .where(eq(userCodesTable.refreshToken, hashedRefreshToken));
+  return { accessToken, refreshToken };
+};
+
+export {
+  register,
+  verifyEmail,
+  login,
+  generateTokens,
+  getUserInfo,
+  refreshToken,
+};

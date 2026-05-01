@@ -79,6 +79,16 @@ const getUserInfo = async function (req: Request, res: Response) {
   ApiResponse.ok(res, "User info retrieved successfully.", userInfo);
 };
 
+const refreshToken = async function (req: Request, res: Response) {
+  const { refreshToken, clientSecret } = req.body;
+  const { accessToken, refreshToken: newRefreshToken } =
+    await AuthService.refreshToken(refreshToken, clientSecret);
+  ApiResponse.ok(res, "Tokens refreshed successfully.", {
+    accessToken,
+    refreshToken: newRefreshToken,
+  });
+};
+
 export {
   register,
   getRegister,
@@ -87,4 +97,5 @@ export {
   login,
   generateToken,
   getUserInfo,
+  refreshToken,
 };
