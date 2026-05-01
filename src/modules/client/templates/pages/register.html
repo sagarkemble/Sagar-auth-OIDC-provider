@@ -820,17 +820,37 @@
             <div class="client-id-box">
               <div class="cid-label">Client ID</div>
               <div class="cid-value" id="clientIdVal">—</div>
-              <button class="copy-btn" data-target="clientIdVal" aria-label="Copy client id">Copy</button>
+              <button
+                class="copy-btn"
+                data-target="clientIdVal"
+                aria-label="Copy client id"
+              >
+                Copy
+              </button>
             </div>
 
             <div class="client-id-box">
-              <div class="cid-label">Client Secret <span style="color:var(--danger);font-weight:600">(one-time)</span></div>
+              <div class="cid-label">
+                Client Secret
+                <span style="color: var(--danger); font-weight: 600"
+                  >(one-time)</span
+                >
+              </div>
               <div class="cid-value" id="clientSecretVal">—</div>
-              <button class="copy-btn" data-target="clientSecretVal" aria-label="Copy client secret">Copy</button>
+              <button
+                class="copy-btn"
+                data-target="clientSecretVal"
+                aria-label="Copy client secret"
+              >
+                Copy
+              </button>
             </div>
           </div>
 
-          <p class="secret-note">This secret is shown only once. Copy and store it securely — it cannot be recovered later.</p>
+          <p class="secret-note">
+            This secret is shown only once. Copy and store it securely — it
+            cannot be recovered later.
+          </p>
 
           <button
             class="btn btn-ghost"
@@ -928,9 +948,10 @@
           const descOk = desc.length >= 10 && desc.length <= 200;
 
           if (!nameOk) {
-            const msg = name.length < 3
-              ? "Application name must be at least 3 characters"
-              : "Application name must be at most 50 characters";
+            const msg =
+              name.length < 3
+                ? "Application name must be at least 3 characters"
+                : "Application name must be at most 50 characters";
             document.getElementById("appNameErr").textContent = msg;
           } else {
             document.getElementById("appNameErr").textContent =
@@ -938,9 +959,10 @@
           }
 
           if (!descOk) {
-            const msg = desc.length < 10
-              ? "Application description must be at least 10 characters"
-              : "Application description must be at most 200 characters";
+            const msg =
+              desc.length < 10
+                ? "Application description must be at least 10 characters"
+                : "Application description must be at most 200 characters";
             document.getElementById("appDescErr").textContent = msg;
           } else {
             document.getElementById("appDescErr").textContent =
@@ -962,16 +984,14 @@
             document.getElementById("appUrlErr").textContent =
               "Invalid application URL";
           } else {
-            document.getElementById("appUrlErr").textContent =
-              "";
+            document.getElementById("appUrlErr").textContent = "";
           }
 
           if (!redOk) {
             document.getElementById("redirectUrlErr").textContent =
               "Invalid redirect URL";
           } else {
-            document.getElementById("redirectUrlErr").textContent =
-              "";
+            document.getElementById("redirectUrlErr").textContent = "";
           }
 
           setError("appUrl", "appUrlErr", !appOk);
@@ -1098,16 +1118,23 @@
               throw { _structured: true, payload: json.error };
             }
             const msg =
-              json.message || (json.data && json.data.message) ||
+              json.message ||
+              (json.data && json.data.message) ||
               `Server responded ${res.status}`;
             throw new Error(msg);
           }
 
           const body = json.data || json;
           const clientId =
-            body.clientId || body.client_id || (body.data && (body.data.clientId || body.data.client_id));
+            body.clientId ||
+            body.client_id ||
+            (body.data && (body.data.clientId || body.data.client_id));
           const clientSecret =
-            body.clientSecret || body.client_secret || (body.data && (body.data.clientSecret || body.data.client_secret)) || '';
+            body.clientSecret ||
+            body.client_secret ||
+            (body.data &&
+              (body.data.clientSecret || body.data.client_secret)) ||
+            "";
 
           // Hide form, show success
           for (let i = 1; i <= TOTAL_STEPS; i++) {
@@ -1151,10 +1178,16 @@
                 if (path === "applicationName" || path === "application_name") {
                   document.getElementById("appNameErr").textContent = msg;
                   setError("appName", "appNameErr", true);
-                } else if (path === "applicationDescription" || path === "application_description") {
+                } else if (
+                  path === "applicationDescription" ||
+                  path === "application_description"
+                ) {
                   document.getElementById("appDescErr").textContent = msg;
                   setError("appDesc", "appDescErr", true);
-                } else if (path === "applicationUrl" || path === "application_url") {
+                } else if (
+                  path === "applicationUrl" ||
+                  path === "application_url"
+                ) {
                   document.getElementById("appUrlErr").textContent = msg;
                   setError("appUrl", "appUrlErr", true);
                 } else if (path === "redirectUrl" || path === "redirect_url") {
@@ -1190,21 +1223,21 @@
 
       // Copy helper
       function initCopyButtons() {
-        document.querySelectorAll('.copy-btn').forEach((btn) => {
-          btn.addEventListener('click', async (ev) => {
+        document.querySelectorAll(".copy-btn").forEach((btn) => {
+          btn.addEventListener("click", async (ev) => {
             const t = ev.currentTarget;
-            const id = t.getAttribute('data-target');
+            const id = t.getAttribute("data-target");
             if (!id) return;
             const el = document.getElementById(id);
             if (!el) return;
-            const text = el.textContent || '';
+            const text = el.textContent || "";
             try {
               await navigator.clipboard.writeText(text);
-              t.classList.add('copied');
+              t.classList.add("copied");
               const prev = t.textContent;
-              t.textContent = 'Copied';
+              t.textContent = "Copied";
               setTimeout(() => {
-                t.classList.remove('copied');
+                t.classList.remove("copied");
                 t.textContent = prev;
               }, 1600);
             } catch {
@@ -1215,16 +1248,16 @@
               sel.removeAllRanges();
               sel.addRange(range);
               try {
-                document.execCommand('copy');
-                t.classList.add('copied');
+                document.execCommand("copy");
+                t.classList.add("copied");
                 const prev = t.textContent;
-                t.textContent = 'Copied';
+                t.textContent = "Copied";
                 setTimeout(() => {
-                  t.classList.remove('copied');
+                  t.classList.remove("copied");
                   t.textContent = prev;
                 }, 1600);
               } catch {
-                alert('Copy failed — please copy manually');
+                alert("Copy failed — please copy manually");
               }
               sel.removeAllRanges();
             }
