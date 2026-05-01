@@ -1,0 +1,1426 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign In — Sagar Auth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* ═══════════════════════════ TOKENS ═══════════════════════════ */
+      :root {
+        --bg: #09090b;
+        --surface: #18181b;
+        --surface2: #27272a;
+        --surface3: #3f3f46;
+        --border: #3f3f46;
+        --border-f: #7c3aed;
+        --muted: #71717a;
+        --text: #fafafa;
+        --text-2: #a1a1aa;
+        --text-3: #71717a;
+        --accent: #7c3aed;
+        --accent-h: #6d28d9;
+        --accent-soft: rgba(124, 58, 237, 0.15);
+        --accent-glow: rgba(124, 58, 237, 0.35);
+        --danger: #f87171;
+        --danger-soft: rgba(248, 113, 113, 0.12);
+        --success: #34d399;
+        --success-soft: rgba(52, 211, 153, 0.12);
+        --r: 10px;
+        --r-lg: 14px;
+        --r-xl: 18px;
+        --fd: "Syne", sans-serif;
+        --fb: "DM Sans", sans-serif;
+        --fm: "DM Mono", monospace;
+      }
+
+      /* ═══════════════════════════ RESET ═════════════════════════════ */
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--fb);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        line-height: 1.5;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background:
+          radial-gradient(
+            ellipse 80% 60% at 20% 10%,
+            rgba(124, 58, 237, 0.12) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 60% 50% at 80% 90%,
+            rgba(109, 40, 217, 0.08) 0%,
+            transparent 55%
+          );
+        pointer-events: none;
+      }
+
+      /* ═══════════════════════════ CARD ══════════════════════════════ */
+      .auth-card {
+        position: relative;
+        z-index: 1;
+        display: grid;
+        grid-template-columns: 360px 1fr;
+        width: 100%;
+        max-width: 900px;
+        min-height: 580px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-xl);
+        overflow: hidden;
+        box-shadow:
+          0 32px 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.04);
+      }
+
+      /* ═══════════════════════════ LEFT PANEL ════════════════════════ */
+      .panel-left {
+        position: relative;
+        background: linear-gradient(
+          160deg,
+          #1a0533 0%,
+          #0d0d1a 50%,
+          #0a0a14 100%
+        );
+        display: flex;
+        flex-direction: column;
+        padding: 36px 32px 40px;
+        overflow: hidden;
+      }
+      .panel-left::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 120% 70% at 50% 110%,
+            rgba(124, 58, 237, 0.25) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            circle 200px at 10% 20%,
+            rgba(139, 92, 246, 0.12) 0%,
+            transparent 50%
+          );
+        pointer-events: none;
+      }
+      .grid-lines {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        opacity: 0.06;
+        background-image:
+          linear-gradient(var(--border) 1px, transparent 1px),
+          linear-gradient(90deg, var(--border) 1px, transparent 1px);
+        background-size: 40px 40px;
+      }
+
+      .logo {
+        font-family: var(--fd);
+        font-weight: 800;
+        font-size: 20px;
+        letter-spacing: -0.5px;
+        color: #fff;
+        z-index: 1;
+        user-select: none;
+      }
+      .logo .acc {
+        color: var(--accent);
+      }
+
+      /* left panel content */
+      .left-body {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        z-index: 1;
+        padding-top: 24px;
+      }
+
+      /* ── decorative orbs on left panel ── */
+      .orb {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .orb-1 {
+        width: 160px;
+        height: 160px;
+        background: radial-gradient(
+          circle,
+          rgba(124, 58, 237, 0.22) 0%,
+          transparent 70%
+        );
+        top: 30%;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .orb-2 {
+        width: 80px;
+        height: 80px;
+        background: radial-gradient(
+          circle,
+          rgba(167, 139, 250, 0.18) 0%,
+          transparent 70%
+        );
+        bottom: 28%;
+        right: 24px;
+      }
+
+      /* welcome text */
+      .welcome-block {
+        text-align: center;
+        margin-bottom: 12px;
+      }
+      .welcome-block h2 {
+        font-family: var(--fd);
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text);
+        margin-bottom: 10px;
+      }
+      .welcome-block p {
+        font-size: 13.5px;
+        color: var(--text-2);
+        line-height: 1.65;
+      }
+      .welcome-block .app-highlight {
+        color: var(--accent);
+        font-weight: 500;
+      }
+
+      /* stat pills */
+      .stat-row {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 24px;
+        flex-wrap: wrap;
+        z-index: 1;
+      }
+      .stat-pill {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 99px;
+        padding: 5px 12px;
+        font-size: 11.5px;
+        color: var(--text-2);
+      }
+      .stat-pill svg {
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+
+      .panel-tagline {
+        margin-top: 28px;
+        font-family: var(--fd);
+        font-size: 17px;
+        font-weight: 700;
+        line-height: 1.35;
+        color: rgba(255, 255, 255, 0.85);
+        z-index: 1;
+        text-align: center;
+      }
+      .panel-tagline span {
+        color: #a78bfa;
+      }
+
+      /* ═══════════════════════════ RIGHT PANEL ═══════════════════════ */
+      .panel-right {
+        padding: 40px 44px;
+        display: flex;
+        flex-direction: column;
+        background: var(--bg);
+        overflow-y: auto;
+      }
+
+      /* ═══════════════════════════ SCREENS ══════════════════════════ */
+      /* All screens hidden by default, shown via .active / .visible */
+      .screen {
+        display: none;
+        flex-direction: column;
+        flex: 1;
+        animation: fadeUp 0.3s ease;
+      }
+      .screen.active {
+        display: flex;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(8px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* back arrow */
+      .back-arrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 7px;
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--text-3);
+        font-family: var(--fb);
+        font-size: 13px;
+        padding: 0;
+        margin-bottom: 24px;
+        transition: color 0.2s;
+        width: fit-content;
+      }
+      .back-arrow:hover {
+        color: var(--text-2);
+      }
+      .back-arrow svg {
+        transition: transform 0.2s;
+      }
+      .back-arrow:hover svg {
+        transform: translateX(-3px);
+      }
+
+      /* ═══════════════════════════ FORM HEADER ═══════════════════════ */
+      .form-header {
+        margin-bottom: 28px;
+      }
+      .form-header h1 {
+        font-family: var(--fd);
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1.15;
+      }
+      .form-header p {
+        margin-top: 7px;
+        font-size: 13.5px;
+        color: var(--text-2);
+        line-height: 1.55;
+      }
+      .form-header .sub-link {
+        font-size: 13px;
+        color: var(--text-2);
+        margin-top: 5px;
+      }
+      .form-header .sub-link a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .form-header .sub-link a:hover {
+        text-decoration: underline;
+      }
+
+      /* ═══════════════════════════ CONSENT SCREEN ════════════════════ */
+      .consent-title {
+        font-family: var(--fd);
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin-bottom: 10px;
+        line-height: 1.2;
+      }
+      .consent-app-name {
+        color: var(--accent);
+      }
+
+      .consent-desc {
+        font-size: 13.5px;
+        color: var(--text-2);
+        text-align: center;
+        line-height: 1.6;
+        margin-bottom: 24px;
+      }
+
+      .consent-box {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 18px 20px;
+        margin-bottom: 24px;
+      }
+      .consent-box h3 {
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--text-2);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 14px;
+      }
+      .perm-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--text-2);
+        margin-bottom: 10px;
+      }
+      .perm-item:last-child {
+        margin-bottom: 0;
+      }
+      .perm-check {
+        width: 18px;
+        height: 18px;
+        flex-shrink: 0;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1px solid rgba(124, 58, 237, 0.35);
+        border-radius: 50%;
+        display: grid;
+        place-items: center;
+        color: var(--accent);
+        font-size: 10px;
+        margin-top: 1px;
+      }
+
+      .consent-footer {
+        font-size: 11.5px;
+        color: var(--text-3);
+        text-align: center;
+        line-height: 1.7;
+        margin-top: 16px;
+      }
+      .consent-footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .consent-footer a:hover {
+        text-decoration: underline;
+      }
+
+      /* ═══════════════════════════ LOGIN SCREEN ══════════════════════ */
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+        margin-bottom: 16px;
+      }
+      .field:last-of-type {
+        margin-bottom: 0;
+      }
+
+      label {
+        font-size: 12.5px;
+        font-weight: 500;
+        color: var(--text-2);
+        letter-spacing: 0.02em;
+      }
+
+      input {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r);
+        color: var(--text);
+        font-family: var(--fb);
+        font-size: 14px;
+        padding: 10px 13px;
+        outline: none;
+        width: 100%;
+        transition:
+          border-color 0.2s,
+          box-shadow 0.2s;
+        -webkit-appearance: none;
+        appearance: none;
+      }
+      input::placeholder {
+        color: var(--muted);
+      }
+      input:focus {
+        border-color: var(--border-f);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+      }
+      input.error {
+        border-color: var(--danger);
+        box-shadow: 0 0 0 3px rgba(248, 113, 113, 0.14);
+      }
+
+      .pw-wrap {
+        position: relative;
+      }
+      .pw-toggle {
+        position: absolute;
+        right: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        cursor: pointer;
+        color: var(--muted);
+        padding: 0;
+        line-height: 0;
+        transition: color 0.2s;
+      }
+      .pw-toggle:hover {
+        color: var(--text-2);
+      }
+      .pw-wrap input {
+        padding-right: 38px;
+      }
+
+      .error-msg {
+        display: none;
+        align-items: center;
+        gap: 4px;
+        font-size: 11.5px;
+        color: var(--danger);
+      }
+      .error-msg.visible {
+        display: flex;
+      }
+
+      .row-between {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 4px;
+        margin-bottom: 4px;
+      }
+      .forgot-link {
+        font-size: 13px;
+        color: var(--accent);
+        text-decoration: none;
+        transition: opacity 0.2s;
+      }
+      .forgot-link:hover {
+        opacity: 0.8;
+        text-decoration: underline;
+      }
+
+      /* signup nudge */
+      .signup-nudge {
+        text-align: center;
+        font-size: 13px;
+        color: var(--text-2);
+      }
+      .signup-nudge a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 500;
+      }
+      .signup-nudge a:hover {
+        text-decoration: underline;
+      }
+
+      /* ═══════════════════════════ BUTTONS ═══════════════════════════ */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: var(--r);
+        font-family: var(--fb);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        border: none;
+        transition: all 0.2s;
+        white-space: nowrap;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background: var(--accent);
+        color: #fff;
+      }
+      .btn-primary:hover:not(:disabled) {
+        background: var(--accent-h);
+        box-shadow: 0 0 20px var(--accent-glow);
+      }
+      .btn-primary:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .btn-ghost {
+        background: transparent;
+        color: var(--text-2);
+        border: 1px solid var(--border);
+      }
+      .btn-ghost:hover {
+        background: var(--surface2);
+        color: var(--text);
+      }
+      .btn-full {
+        width: 100%;
+      }
+
+      /* ═══════════════════════════ API ERROR BANNER ══════════════════ */
+      .api-error {
+        display: none;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--danger-soft);
+        border: 1px solid rgba(248, 113, 113, 0.25);
+        border-radius: var(--r);
+        font-size: 13px;
+        color: var(--danger);
+        margin-bottom: 20px;
+      }
+      .api-error.visible {
+        display: flex;
+      }
+
+      /* ═══════════════════════════ SPINNER ═══════════════════════════ */
+      .spinner {
+        width: 15px;
+        height: 15px;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: spin 0.7s linear infinite;
+        display: none;
+        flex-shrink: 0;
+      }
+      .spinner.vis {
+        display: block;
+      }
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      /* ═══════════════════════════ SUCCESS SCREEN ════════════════════ */
+      .success-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex: 1;
+        text-align: center;
+        gap: 14px;
+      }
+      .success-icon-ring {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--success-soft);
+        border: 1.5px solid rgba(52, 211, 153, 0.35);
+        display: grid;
+        place-items: center;
+        color: var(--success);
+        font-size: 26px;
+      }
+      .success-wrap h2 {
+        font-family: var(--fd);
+        font-size: 22px;
+        font-weight: 700;
+      }
+      .success-wrap p {
+        font-size: 13.5px;
+        color: var(--text-2);
+        max-width: 280px;
+        line-height: 1.6;
+      }
+      .redirect-spinner {
+        width: 24px;
+        height: 24px;
+        border: 2px solid rgba(124, 58, 237, 0.3);
+        border-top-color: var(--accent);
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+        margin-top: 8px;
+      }
+
+      /* ═══════════════════════════ MODAL ═════════════════════════════ */
+      .modal-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 200;
+        background: rgba(0, 0, 0, 0.7);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 24px;
+      }
+      .modal-overlay.open {
+        display: flex;
+        animation: fadeIn 0.2s ease;
+      }
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .modal {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 32px;
+        width: 100%;
+        max-width: 420px;
+        box-shadow: 0 32px 80px rgba(0, 0, 0, 0.6);
+        animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .modal-header {
+        margin-bottom: 20px;
+      }
+      .modal-header h2 {
+        font-family: var(--fd);
+        font-size: 20px;
+        font-weight: 700;
+        margin-bottom: 6px;
+      }
+      .modal-header p {
+        font-size: 13px;
+        color: var(--text-2);
+        line-height: 1.6;
+      }
+
+      .modal-actions {
+        display: flex;
+        gap: 10px;
+        margin-top: 22px;
+      }
+
+      /* forgot success */
+      .forgot-success {
+        display: none;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 14px;
+      }
+      .forgot-success.active {
+        display: flex;
+      }
+      .forgot-success-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 50%;
+        background: var(--success-soft);
+        border: 1.5px solid rgba(52, 211, 153, 0.35);
+        display: grid;
+        place-items: center;
+        color: var(--success);
+        font-size: 22px;
+      }
+      .forgot-success h2 {
+        font-family: var(--fd);
+        font-size: 19px;
+        font-weight: 700;
+      }
+      .forgot-success p {
+        font-size: 13px;
+        color: var(--text-2);
+        line-height: 1.6;
+        max-width: 300px;
+      }
+      .countdown-note {
+        font-size: 12px;
+        color: var(--text-3);
+      }
+      .countdown-note span {
+        color: var(--accent);
+        font-weight: 600;
+      }
+
+      /* ═══════════════════════════ RESPONSIVE ════════════════════════ */
+      @media (max-width: 760px) {
+        .auth-card {
+          grid-template-columns: 1fr;
+          max-width: 460px;
+          min-height: unset;
+        }
+        .panel-left {
+          display: none;
+        }
+        .panel-right {
+          padding: 32px 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ══════════════ CARD ══════════════ -->
+    <div class="auth-card">
+      <!-- ── LEFT PANEL ── -->
+      <div class="panel-left">
+        <div class="grid-lines"></div>
+        <div class="logo">Sagar<span class="acc">Auth</span></div>
+
+        <div class="left-body">
+          <div class="orb orb-1"></div>
+          <div class="orb orb-2"></div>
+
+          <div
+            class="lock-wrap"
+            style="
+              display: flex;
+              justify-content: center;
+              margin-bottom: 28px;
+              z-index: 1;
+            "
+          >
+            <div
+              style="
+                width: 80px;
+                height: 80px;
+                border-radius: 50%;
+                background: rgba(124, 58, 237, 0.15);
+                border: 1.5px solid rgba(124, 58, 237, 0.35);
+                display: grid;
+                place-items: center;
+                box-shadow: 0 0 32px rgba(124, 58, 237, 0.2);
+              "
+            >
+              <svg
+                width="32"
+                height="32"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#a78bfa"
+                stroke-width="1.8"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+          </div>
+
+          <div class="welcome-block" style="z-index: 1">
+            <h2>Welcome Back</h2>
+            <p>
+              Sign in to continue to<br />
+              <span class="app-highlight" id="leftAppName"
+                >{application name}</span
+              >
+            </p>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-pill">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+              </svg>
+              Secure login
+            </div>
+            <div class="stat-pill">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <path d="m9 12 2 2 4-4" />
+              </svg>
+              OIDC certified
+            </div>
+            <div class="stat-pill">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="3" y="11" width="18" height="11" rx="2" />
+                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              Encrypted
+            </div>
+          </div>
+
+          <p class="panel-tagline">
+            Secure authentication<br />powered by <span>Sagar Auth</span>
+          </p>
+        </div>
+      </div>
+
+      <!-- ── RIGHT PANEL ── -->
+      <div class="panel-right">
+        <!-- ════ CONSENT SCREEN ════ -->
+        <div class="screen active" id="consentScreen">
+          <h1 class="consent-title">
+            Continue to<br />
+            <span class="consent-app-name" id="consentAppName"
+              >{application name}</span
+            >
+          </h1>
+
+          <p class="consent-desc" id="consentAppDesc">
+            This application is requesting access to your Sagar Auth account to
+            verify your identity.
+          </p>
+
+          <div class="consent-box">
+            <h3>This application will be able to</h3>
+            <div class="perm-item">
+              <div class="perm-check">✓</div>
+              <span>View your email address</span>
+            </div>
+            <div class="perm-item">
+              <div class="perm-check">✓</div>
+              <span>View your basic profile information</span>
+            </div>
+            <div class="perm-item">
+              <div class="perm-check">✓</div>
+              <span>Authenticate your identity securely</span>
+            </div>
+          </div>
+
+          <button class="btn btn-primary btn-full" id="btnConsent">
+            Continue
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <p class="consent-footer">
+            By continuing, you allow this app to access your information<br />
+            in accordance with their
+            <a href="#">terms of service</a> and <a href="#">privacy policy</a>.
+          </p>
+        </div>
+
+        <!-- ════ LOGIN SCREEN ════ -->
+        <div class="screen" id="loginScreen">
+          <!-- Back arrow -->
+          <button class="back-arrow" id="btnBackToConsent">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            Back
+          </button>
+
+          <div class="form-header">
+            <h1>Sign in</h1>
+            <p>Enter your credentials to continue.</p>
+          </div>
+
+          <!-- API error -->
+          <div class="api-error" id="apiError">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span id="apiErrorText"
+              >Something went wrong. Please try again.</span
+            >
+          </div>
+
+          <div class="field">
+            <label for="email"
+              >Email address <span style="color: var(--danger)">*</span></label
+            >
+            <input
+              type="email"
+              id="email"
+              placeholder="you@example.com"
+              maxlength="254"
+              autocomplete="email"
+            />
+            <span class="error-msg" id="emailErr">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Enter a valid email address
+            </span>
+          </div>
+
+          <div class="field">
+            <label for="password"
+              >Password <span style="color: var(--danger)">*</span></label
+            >
+            <div class="pw-wrap">
+              <input
+                type="password"
+                id="password"
+                placeholder="Enter your password"
+                autocomplete="current-password"
+              />
+              <button
+                type="button"
+                class="pw-toggle"
+                id="togglePw"
+                tabindex="-1"
+              >
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              </button>
+            </div>
+            <span class="error-msg" id="passwordErr">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Password is required
+            </span>
+          </div>
+
+          <div class="row-between" style="margin-top: 4px">
+            <span></span>
+            <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
+          </div>
+
+          <button
+            class="btn btn-primary btn-full"
+            id="btnLogin"
+            style="margin-top: 20px"
+          >
+            Sign in
+            <div class="spinner" id="loginSpinner"></div>
+            <svg
+              width="14"
+              height="14"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <div
+            style="
+              text-align: center;
+              margin-top: 22px;
+              font-size: 13px;
+              color: var(--text-2);
+            "
+          >
+            Don't have an account?
+            <a
+              href="register-all-in-one.html"
+              style="
+                color: var(--accent);
+                text-decoration: none;
+                font-weight: 500;
+              "
+              >Sign up</a
+            >
+          </div>
+        </div>
+
+        <!-- ════ SUCCESS SCREEN ════ -->
+        <div class="screen" id="successScreen">
+          <div class="success-wrap">
+            <div class="success-icon-ring">✓</div>
+            <h2>Signed in!</h2>
+            <p>
+              Redirecting you back to
+              <strong id="successAppName" style="color: var(--text)"
+                >{application name}</strong
+              >…
+            </p>
+            <div class="redirect-spinner"></div>
+          </div>
+        </div>
+      </div>
+      <!-- /panel-right -->
+    </div>
+    <!-- /auth-card -->
+
+    <!-- ══════════════ FORGOT PASSWORD MODAL ══════════════ -->
+    <div class="modal-overlay" id="forgotModal">
+      <div class="modal">
+        <!-- Form view -->
+        <div id="forgotFormView">
+          <div class="modal-header">
+            <h2>Reset password</h2>
+            <p>Enter your email and we'll send you a reset link.</p>
+          </div>
+
+          <div class="api-error" id="forgotApiError">
+            <svg
+              width="15"
+              height="15"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="12" y1="8" x2="12" y2="12" />
+              <line x1="12" y1="16" x2="12.01" y2="16" />
+            </svg>
+            <span id="forgotApiErrorText">Something went wrong.</span>
+          </div>
+
+          <div class="field" style="margin-bottom: 0">
+            <label for="forgotEmail"
+              >Email address <span style="color: var(--danger)">*</span></label
+            >
+            <input
+              type="email"
+              id="forgotEmail"
+              placeholder="you@example.com"
+              maxlength="254"
+              autocomplete="email"
+            />
+            <span class="error-msg" id="forgotEmailErr">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Enter a valid email address
+            </span>
+          </div>
+
+          <div class="modal-actions">
+            <button class="btn btn-ghost" id="btnCancelForgot" style="flex: 1">
+              Cancel
+            </button>
+            <button class="btn btn-primary" id="btnSendReset" style="flex: 1">
+              Send reset link
+              <div class="spinner" id="forgotSpinner"></div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Success view -->
+        <div class="forgot-success" id="forgotSuccessView">
+          <div class="forgot-success-icon">✓</div>
+          <h2>Email sent!</h2>
+          <p>
+            A reset link was sent to
+            <strong id="forgotEmailDisplay" style="color: var(--text)"></strong
+            >. Check your inbox.
+          </p>
+          <p class="countdown-note">
+            Closing in <span id="countdown">10</span> seconds…
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      /* ══════════════════════════════════════════════
+   STATE & UTILS
+══════════════════════════════════════════════ */
+      const urlParams = new URLSearchParams(window.location.search);
+      const clientId = urlParams.get("clientId");
+
+      function $(id) {
+        return document.getElementById(id);
+      }
+
+      function showScreen(id) {
+        document
+          .querySelectorAll(".screen")
+          .forEach((s) => s.classList.remove("active"));
+        $(id).classList.add("active");
+      }
+
+      function setErr(inputId, errId, show) {
+        $(inputId).classList.toggle("error", show);
+        $(errId).classList.toggle("visible", show);
+      }
+      function clrErr(inputId, errId) {
+        setErr(inputId, errId, false);
+      }
+
+      function isValidEmail(v) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim());
+      }
+
+      function showApiError(bannerId, textId, msg) {
+        $(bannerId).classList.add("visible");
+        $(textId).textContent = msg;
+      }
+      function hideApiError(bannerId) {
+        $(bannerId).classList.remove("visible");
+      }
+
+      /* ══════════════════════════════════════════════
+   SCREEN TRANSITIONS
+══════════════════════════════════════════════ */
+      $("btnConsent").addEventListener("click", () =>
+        showScreen("loginScreen"),
+      );
+
+      $("btnBackToConsent").addEventListener("click", () => {
+        hideApiError("apiError");
+        showScreen("consentScreen");
+      });
+
+      /* ══════════════════════════════════════════════
+   PASSWORD TOGGLE
+══════════════════════════════════════════════ */
+      $("togglePw").addEventListener("click", () => {
+        const ip = $("password");
+        const hide = ip.type === "text";
+        ip.type = hide ? "password" : "text";
+        $("togglePw").innerHTML = hide
+          ? `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>`
+          : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
+      });
+
+      /* ══════════════════════════════════════════════
+   LIVE CLEAR
+══════════════════════════════════════════════ */
+      $("email").addEventListener("input", () => clrErr("email", "emailErr"));
+      $("password").addEventListener("input", () =>
+        clrErr("password", "passwordErr"),
+      );
+
+      /* ══════════════════════════════════════════════
+   LOGIN SUBMIT
+══════════════════════════════════════════════ */
+      $("btnLogin").addEventListener("click", async () => {
+        const email = $("email").value.trim();
+        const password = $("password").value;
+
+        const emailOk = isValidEmail(email);
+        const pwOk = password.length >= 1;
+        setErr("email", "emailErr", !emailOk);
+        setErr("password", "passwordErr", !pwOk);
+        if (!emailOk || !pwOk) return;
+
+        if (!clientId) {
+          showApiError(
+            "apiError",
+            "apiErrorText",
+            "clientId is required in the URL query parameters.",
+          );
+          return;
+        }
+
+        hideApiError("apiError");
+        const btn = $("btnLogin");
+        const spinner = $("loginSpinner");
+        btn.disabled = true;
+        spinner.classList.add("vis");
+
+        try {
+          const res = await fetch(
+            `/auth/login?clientId=${encodeURIComponent(clientId)}`,
+            {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ email, password }),
+            },
+          );
+          const data = await res.json().catch(() => ({}));
+
+          if (!res.ok) {
+            const details = data.error?.details || [];
+            if (details.length)
+              throw new Error(details.map((d) => d.message || d).join(", "));
+            throw new Error(
+              data.error?.message || data.message || `Error ${res.status}`,
+            );
+          }
+
+          const { redirectUrl } = data.data;
+          showScreen("successScreen");
+          setTimeout(() => {
+            window.location.href = redirectUrl;
+          }, 2000);
+        } catch (e) {
+          showApiError(
+            "apiError",
+            "apiErrorText",
+            e.message || "Something went wrong.",
+          );
+          btn.disabled = false;
+          spinner.classList.remove("vis");
+        }
+      });
+
+      /* ══════════════════════════════════════════════
+   FORGOT PASSWORD MODAL
+══════════════════════════════════════════════ */
+      let countdownInterval = null;
+
+      function openForgotModal() {
+        $("forgotEmail").value = "";
+        clrErr("forgotEmail", "forgotEmailErr");
+        hideApiError("forgotApiError");
+        $("forgotFormView").style.display = "block";
+        $("forgotSuccessView").classList.remove("active");
+        $("forgotModal").classList.add("open");
+      }
+      function closeForgotModal() {
+        $("forgotModal").classList.remove("open");
+        clearInterval(countdownInterval);
+        $("btnSendReset").disabled = false;
+        $("forgotSpinner").classList.remove("vis");
+      }
+
+      $("forgotLink").addEventListener("click", (e) => {
+        e.preventDefault();
+        openForgotModal();
+      });
+      $("btnCancelForgot").addEventListener("click", closeForgotModal);
+      $("forgotModal").addEventListener("click", (e) => {
+        if (e.target === $("forgotModal")) closeForgotModal();
+      });
+      $("forgotEmail").addEventListener("input", () =>
+        clrErr("forgotEmail", "forgotEmailErr"),
+      );
+
+      $("btnSendReset").addEventListener("click", async () => {
+        const email = $("forgotEmail").value.trim();
+        const ok = isValidEmail(email);
+        setErr("forgotEmail", "forgotEmailErr", !ok);
+        if (!ok) return;
+
+        hideApiError("forgotApiError");
+        const btn = $("btnSendReset");
+        const spinner = $("forgotSpinner");
+        btn.disabled = true;
+        spinner.classList.add("vis");
+
+        try {
+          const res = await fetch("/auth/forgot-password", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            const details = data.error?.details || [];
+            if (details.length)
+              throw new Error(details.map((d) => d.message || d).join(", "));
+            throw new Error(
+              data.error?.message || data.message || `Error ${res.status}`,
+            );
+          }
+
+          // Show success
+          $("forgotFormView").style.display = "none";
+          $("forgotEmailDisplay").textContent = email;
+          $("forgotSuccessView").classList.add("active");
+          spinner.classList.remove("vis");
+
+          let secs = 10;
+          $("countdown").textContent = secs;
+          countdownInterval = setInterval(() => {
+            secs--;
+            $("countdown").textContent = secs;
+            if (secs <= 0) {
+              clearInterval(countdownInterval);
+              closeForgotModal();
+            }
+          }, 1000);
+        } catch (e) {
+          showApiError(
+            "forgotApiError",
+            "forgotApiErrorText",
+            e.message || "Something went wrong.",
+          );
+          btn.disabled = false;
+          spinner.classList.remove("vis");
+        }
+      });
+    </script>
+  </body>
+</html>

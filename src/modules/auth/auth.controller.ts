@@ -31,7 +31,7 @@ const register = async function (req: Request, res: Response) {
 };
 
 const getRegister = function (_req: Request, res: Response) {
-  res.sendFile(path.resolve("public/authPage/register.html"));
+  res.sendFile(path.resolve("public", "html", "register.html"));
 };
 
 const verifyEmail = async function (req: Request, res: Response) {
@@ -54,17 +54,18 @@ const login = async function (req: Request, res: Response) {
     clientId,
     clientTableEntryId,
   );
+
+  const redirectUrl = `${req.clientInfo?.redirectUrl}?code=${authorizationCode}`;
   ApiResponse.ok(
     res,
     "Authorization code sent,Verify at /token endpoint to get access token and refresh token.",
-    authorizationCode,
+    { redirectUrl },
   );
 };
 
 const getLogin = async function (req: Request, res: Response) {
-  const loginHtmlPath = path.resolve("public", "authPage", "login.html");
+  const loginHtmlPath = path.resolve("public", "html", "login.html");
   const loginHtml = fs.readFileSync(loginHtmlPath, "utf-8");
-
   const modifiedLoginHtml = loginHtml.replaceAll(
     "{application name}",
     req.clientInfo?.applicationName!,

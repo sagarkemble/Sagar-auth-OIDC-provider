@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Create Account — Sagar Auth</title>
-    <link rel="stylesheet" href="/authPage/auth.css" />
+    <link rel="stylesheet" href="auth.css" />
     <style>
       /* ── Password input wrapper ── */
       .pw-wrapper {
@@ -261,7 +261,7 @@
               <input
                 type="text"
                 id="lastName"
-                placeholder="Kemble"
+                placeholder="Sharma"
                 maxlength="50"
                 autocomplete="family-name"
               />
@@ -303,7 +303,7 @@
                   <line x1="12" y1="8" x2="12" y2="12" />
                   <line x1="12" y1="16" x2="12.01" y2="16" />
                 </svg>
-                Please enter a valid date
+                Must be 13+ years old
               </span>
             </div>
             <div class="field">
@@ -609,9 +609,9 @@
           <div class="success-icon">✓</div>
           <h2>Account created!</h2>
           <p>
-            A verification email has been sent to
+            We sent a verification email to
             <strong id="successEmail" style="color: var(--text)"></strong>.
-            Please check your inbox and verify your email to activate your account.
+            Check your inbox to activate your account.
           </p>
           <a
             href="login.html"
@@ -658,7 +658,7 @@
     </div>
     <!-- /auth-card -->
 
-    <script src="/authPage/auth.js"></script>
-    <script type="module" src="/authPage/register.js"></script>
+    <script src="auth.js"></script>
+    <script type="module" src="register.js"></script>
   </body>
 </html>

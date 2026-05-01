@@ -21,7 +21,7 @@ const Validators = {
     const d = new Date(v);
     const now = new Date();
     const age = (now - d) / (1000 * 60 * 60 * 24 * 365.25);
-    return age >= 0 && age <= 120;
+    return age >= 13 && age <= 120;
   },
   password: (v) => v.length >= 8,
   match: (v, other) => v === other,
