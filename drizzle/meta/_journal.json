@@ -29,6 +29,13 @@
       "when": 1777639442230,
       "tag": "0003_short_black_knight",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1777642526526,
+      "tag": "0004_smiling_angel",
+      "breakpoints": true
     }
   ]
 }

@@ -11,9 +11,7 @@ import usersTable from "./auth.users.model";
 
 const userCodesTable = pgTable("user_codes", {
   id: uuid("id").primaryKey().defaultRandom(),
-  clientId: uuid("client_id")
-    .notNull()
-    .references(() => clientTable.id),
+  clientId: uuid("client_id").references(() => clientTable.id),
   userId: uuid("user_id")
     .notNull()
     .references(() => usersTable.id),

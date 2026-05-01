@@ -9,7 +9,7 @@ import {
   pgEnum,
 } from "drizzle-orm/pg-core";
 
-const genderEnum = pgEnum("gender", ["Male", "Female", "Other"]);
+const genderEnum = pgEnum("gender", ["male", "female", "other"]);
 const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   firstName: varchar("first_name", { length: 50 }).notNull(),
