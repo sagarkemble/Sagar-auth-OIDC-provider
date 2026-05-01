@@ -42,4 +42,5 @@ const sendForgotPasswordEmail = async function (to: string, token: string) {
     html: emailContent,
   });
 };
+
 export { sendVerificationEmail, sendForgotPasswordEmail };

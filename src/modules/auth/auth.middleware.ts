@@ -15,7 +15,6 @@ const verifyClientId = async function (
     throw ApiError.badRequest("clientId is required and must be a string");
   }
   const hashedClientId = await cryptoUtils.hashContent(clientId);
-  console.log(hashedClientId);
 
   const [isValidClientId] = await db
     .select()
@@ -24,7 +23,12 @@ const verifyClientId = async function (
   if (!isValidClientId) {
     throw ApiError.badRequest("Invalid clientId");
   }
-  req.clientInfo = { clientId, clientTableEntryId: isValidClientId.id };
+  req.clientInfo = {
+    clientId,
+    clientTableEntryId: isValidClientId.id,
+    applicationName: isValidClientId.applicationName,
+    redirectUrl: isValidClientId.redirectUrl,
+  };
   next();
 };
 

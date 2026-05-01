@@ -25,6 +25,7 @@ authRouter.post(
   validateDto(loginDto),
   authController.login,
 );
+authRouter.get("/login", verifyClientId, authController.getLogin);
 authRouter.get("/verify-email", authController.getVerifyEmail);
 authRouter.post(
   "/token",

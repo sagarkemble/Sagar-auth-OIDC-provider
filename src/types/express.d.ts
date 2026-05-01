@@ -5,6 +5,8 @@ declare module "express" {
     clientInfo?: {
       clientTableEntryId: string;
       clientId: string;
+      applicationName: string;
+      redirectUrl: string;
     };
   }
 }

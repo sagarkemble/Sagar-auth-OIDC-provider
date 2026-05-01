@@ -3,6 +3,7 @@ import * as AuthService from "./auth.service";
 import ApiResponse from "../../common/utils/api-response.utils";
 import path from "path";
 import ApiError from "../../common/utils/api-error.utils";
+import fs from "fs";
 
 const register = async function (req: Request, res: Response) {
   const {
@@ -58,6 +59,17 @@ const login = async function (req: Request, res: Response) {
     "Authorization code sent,Verify at /token endpoint to get access token and refresh token.",
     authorizationCode,
   );
+};
+
+const getLogin = async function (req: Request, res: Response) {
+  const loginHtmlPath = path.resolve("public", "authPage", "login.html");
+  const loginHtml = fs.readFileSync(loginHtmlPath, "utf-8");
+
+  const modifiedLoginHtml = loginHtml.replaceAll(
+    "{application name}",
+    req.clientInfo?.applicationName!,
+  );
+  res.status(200).send(modifiedLoginHtml);
 };
 
 const generateToken = async function (req: Request, res: Response) {
@@ -120,4 +132,5 @@ export {
   getResetPassword,
   resetPassword,
   forgotPassword,
+  getLogin,
 };
