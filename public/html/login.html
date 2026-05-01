@@ -84,10 +84,10 @@
         position: relative;
         z-index: 1;
         display: grid;
-        grid-template-columns: 360px 1fr;
+        grid-template-columns: 340px 1fr;
         width: 100%;
-        max-width: 900px;
-        min-height: 580px;
+        max-width: 880px;
+        min-height: 600px;
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--r-xl);
@@ -108,8 +108,9 @@
         );
         display: flex;
         flex-direction: column;
-        padding: 36px 32px 40px;
+        padding: 36px 32px 36px;
         overflow: hidden;
+        gap: 0;
       }
       .panel-left::after {
         content: "";
@@ -147,6 +148,7 @@
         color: #fff;
         z-index: 1;
         user-select: none;
+        position: relative;
       }
       .logo .acc {
         color: var(--accent);
@@ -157,12 +159,14 @@
         flex: 1;
         display: flex;
         flex-direction: column;
-        justify-content: flex-end;
+        justify-content: center;
+        align-items: center;
         z-index: 1;
-        padding-top: 24px;
+        position: relative;
+        gap: 0;
       }
 
-      /* ── decorative orbs on left panel ── */
+      /* decorative orbs on left panel */
       .orb {
         position: absolute;
         border-radius: 50%;
@@ -170,40 +174,59 @@
         z-index: 0;
       }
       .orb-1 {
-        width: 160px;
-        height: 160px;
+        width: 180px;
+        height: 180px;
         background: radial-gradient(
           circle,
-          rgba(124, 58, 237, 0.22) 0%,
+          rgba(124, 58, 237, 0.18) 0%,
           transparent 70%
         );
-        top: 30%;
+        top: 50%;
         left: 50%;
-        transform: translateX(-50%);
+        transform: translate(-50%, -50%);
       }
       .orb-2 {
-        width: 80px;
-        height: 80px;
+        width: 90px;
+        height: 90px;
         background: radial-gradient(
           circle,
-          rgba(167, 139, 250, 0.18) 0%,
+          rgba(167, 139, 250, 0.14) 0%,
           transparent 70%
         );
-        bottom: 28%;
-        right: 24px;
+        bottom: 15%;
+        right: 16px;
+      }
+
+      /* lock icon */
+      .lock-icon-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: rgba(124, 58, 237, 0.15);
+        border: 1.5px solid rgba(124, 58, 237, 0.35);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 0 32px rgba(124, 58, 237, 0.2);
+        margin-bottom: 28px;
+        position: relative;
+        z-index: 1;
+        flex-shrink: 0;
       }
 
       /* welcome text */
       .welcome-block {
         text-align: center;
-        margin-bottom: 12px;
+        z-index: 1;
+        position: relative;
+        margin-bottom: 24px;
       }
       .welcome-block h2 {
         font-family: var(--fd);
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
         color: var(--text);
         margin-bottom: 10px;
+        line-height: 1.2;
       }
       .welcome-block p {
         font-size: 13.5px;
@@ -218,22 +241,24 @@
       /* stat pills */
       .stat-row {
         display: flex;
-        gap: 8px;
+        gap: 6px;
         justify-content: center;
-        margin-top: 24px;
         flex-wrap: wrap;
         z-index: 1;
+        position: relative;
+        margin-bottom: 24px;
       }
       .stat-pill {
         display: flex;
         align-items: center;
-        gap: 6px;
+        gap: 5px;
         background: rgba(255, 255, 255, 0.05);
         border: 1px solid rgba(255, 255, 255, 0.08);
         border-radius: 99px;
-        padding: 5px 12px;
-        font-size: 11.5px;
+        padding: 5px 11px;
+        font-size: 11px;
         color: var(--text-2);
+        white-space: nowrap;
       }
       .stat-pill svg {
         color: var(--accent);
@@ -241,13 +266,13 @@
       }
 
       .panel-tagline {
-        margin-top: 28px;
         font-family: var(--fd);
-        font-size: 17px;
+        font-size: 15px;
         font-weight: 700;
-        line-height: 1.35;
-        color: rgba(255, 255, 255, 0.85);
+        line-height: 1.4;
+        color: rgba(255, 255, 255, 0.75);
         z-index: 1;
+        position: relative;
         text-align: center;
       }
       .panel-tagline span {
@@ -256,7 +281,7 @@
 
       /* ═══════════════════════════ RIGHT PANEL ═══════════════════════ */
       .panel-right {
-        padding: 40px 44px;
+        padding: 44px 48px;
         display: flex;
         flex-direction: column;
         background: var(--bg);
@@ -264,7 +289,6 @@
       }
 
       /* ═══════════════════════════ SCREENS ══════════════════════════ */
-      /* All screens hidden by default, shown via .active / .visible */
       .screen {
         display: none;
         flex-direction: column;
@@ -298,7 +322,7 @@
         font-family: var(--fb);
         font-size: 13px;
         padding: 0;
-        margin-bottom: 24px;
+        margin-bottom: 28px;
         transition: color 0.2s;
         width: fit-content;
       }
@@ -312,45 +336,19 @@
         transform: translateX(-3px);
       }
 
-      /* ═══════════════════════════ FORM HEADER ═══════════════════════ */
-      .form-header {
-        margin-bottom: 28px;
-      }
-      .form-header h1 {
-        font-family: var(--fd);
-        font-size: 26px;
-        font-weight: 700;
-        letter-spacing: -0.5px;
-        line-height: 1.15;
-      }
-      .form-header p {
-        margin-top: 7px;
-        font-size: 13.5px;
-        color: var(--text-2);
-        line-height: 1.55;
-      }
-      .form-header .sub-link {
-        font-size: 13px;
-        color: var(--text-2);
-        margin-top: 5px;
-      }
-      .form-header .sub-link a {
-        color: var(--accent);
-        text-decoration: none;
-        font-weight: 500;
-      }
-      .form-header .sub-link a:hover {
-        text-decoration: underline;
+      /* ═══════════════════════════ CONSENT SCREEN ════════════════════ */
+      #consentScreen {
+        justify-content: center;
       }
 
-      /* ═══════════════════════════ CONSENT SCREEN ════════════════════ */
       .consent-title {
         font-family: var(--fd);
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 700;
         text-align: center;
         margin-bottom: 10px;
         line-height: 1.2;
+        color: var(--text);
       }
       .consent-app-name {
         color: var(--accent);
@@ -360,39 +358,39 @@
         font-size: 13.5px;
         color: var(--text-2);
         text-align: center;
-        line-height: 1.6;
-        margin-bottom: 24px;
+        line-height: 1.65;
+        margin-bottom: 28px;
       }
 
       .consent-box {
         background: var(--surface);
         border: 1px solid var(--border);
         border-radius: var(--r-lg);
-        padding: 18px 20px;
+        padding: 20px 22px;
         margin-bottom: 24px;
       }
       .consent-box h3 {
-        font-size: 12.5px;
+        font-size: 11.5px;
         font-weight: 600;
-        color: var(--text-2);
+        color: var(--text-3);
         text-transform: uppercase;
-        letter-spacing: 0.05em;
-        margin-bottom: 14px;
+        letter-spacing: 0.06em;
+        margin-bottom: 16px;
       }
       .perm-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 10px;
-        font-size: 13px;
+        font-size: 13.5px;
         color: var(--text-2);
-        margin-bottom: 10px;
+        padding: 6px 0;
       }
-      .perm-item:last-child {
-        margin-bottom: 0;
+      .perm-item + .perm-item {
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
       }
       .perm-check {
-        width: 18px;
-        height: 18px;
+        width: 20px;
+        height: 20px;
         flex-shrink: 0;
         background: rgba(124, 58, 237, 0.15);
         border: 1px solid rgba(124, 58, 237, 0.35);
@@ -401,7 +399,7 @@
         place-items: center;
         color: var(--accent);
         font-size: 10px;
-        margin-top: 1px;
+        font-weight: 700;
       }
 
       .consent-footer {
@@ -409,7 +407,7 @@
         color: var(--text-3);
         text-align: center;
         line-height: 1.7;
-        margin-top: 16px;
+        margin-top: 18px;
       }
       .consent-footer a {
         color: var(--accent);
@@ -420,14 +418,48 @@
       }
 
       /* ═══════════════════════════ LOGIN SCREEN ══════════════════════ */
+      #loginScreen {
+        justify-content: flex-start;
+        position: relative;
+      }
+
+      .back-arrow {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+
+      .login-form-center {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+
+      .form-header {
+        margin-bottom: 28px;
+      }
+      .form-header h1 {
+        font-family: var(--fd);
+        font-size: 28px;
+        font-weight: 700;
+        letter-spacing: -0.5px;
+        line-height: 1.15;
+        color: var(--text);
+      }
+      .form-header p {
+        margin-top: 8px;
+        font-size: 13.5px;
+        color: var(--text-2);
+        line-height: 1.55;
+      }
+
+      /* fields */
       .field {
         display: flex;
         flex-direction: column;
         gap: 6px;
-        margin-bottom: 16px;
-      }
-      .field:last-of-type {
-        margin-bottom: 0;
+        margin-bottom: 18px;
       }
 
       label {
@@ -444,7 +476,7 @@
         color: var(--text);
         font-family: var(--fb);
         font-size: 14px;
-        padding: 10px 13px;
+        padding: 11px 14px;
         outline: none;
         width: 100%;
         transition:
@@ -456,6 +488,17 @@
       input::placeholder {
         color: var(--muted);
       }
+
+      /* Autofill styling */
+      input:-webkit-autofill,
+      input:-webkit-autofill:hover,
+      input:-webkit-autofill:focus,
+      input:-webkit-autofill:active {
+        -webkit-box-shadow: 0 0 0 30px var(--surface) inset !important;
+        -webkit-text-fill-color: var(--text) !important;
+        border: 1px solid var(--border) !important;
+      }
+
       input:focus {
         border-color: var(--border-f);
         box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
@@ -480,31 +523,34 @@
         padding: 0;
         line-height: 0;
         transition: color 0.2s;
+        display: flex;
+        align-items: center;
       }
       .pw-toggle:hover {
         color: var(--text-2);
       }
       .pw-wrap input {
-        padding-right: 38px;
+        padding-right: 40px;
       }
 
       .error-msg {
         display: none;
         align-items: center;
-        gap: 4px;
-        font-size: 11.5px;
+        gap: 5px;
+        font-size: 12px;
         color: var(--danger);
+        line-height: 1.4;
       }
       .error-msg.visible {
         display: flex;
       }
 
-      .row-between {
+      /* forgot link row */
+      .forgot-row {
         display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-top: 4px;
-        margin-bottom: 4px;
+        justify-content: flex-end;
+        margin-top: -6px;
+        margin-bottom: 6px;
       }
       .forgot-link {
         font-size: 13px;
@@ -513,8 +559,16 @@
         transition: opacity 0.2s;
       }
       .forgot-link:hover {
-        opacity: 0.8;
+        opacity: 0.75;
         text-decoration: underline;
+      }
+
+      /* divider between fields + submit */
+      .form-footer-group {
+        margin-top: 8px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
       }
 
       /* signup nudge */
@@ -538,7 +592,7 @@
         align-items: center;
         justify-content: center;
         gap: 8px;
-        padding: 10px 20px;
+        padding: 11px 20px;
         border-radius: var(--r);
         font-family: var(--fb);
         font-size: 14px;
@@ -548,6 +602,7 @@
         transition: all 0.2s;
         white-space: nowrap;
         text-decoration: none;
+        line-height: 1;
       }
       .btn-primary {
         background: var(--accent);
@@ -577,7 +632,7 @@
       /* ═══════════════════════════ API ERROR BANNER ══════════════════ */
       .api-error {
         display: none;
-        align-items: center;
+        align-items: flex-start;
         gap: 10px;
         padding: 12px 14px;
         background: var(--danger-soft);
@@ -586,9 +641,14 @@
         font-size: 13px;
         color: var(--danger);
         margin-bottom: 20px;
+        line-height: 1.5;
       }
       .api-error.visible {
         display: flex;
+      }
+      .api-error svg {
+        flex-shrink: 0;
+        margin-top: 1px;
       }
 
       /* ═══════════════════════════ SPINNER ═══════════════════════════ */
@@ -612,6 +672,10 @@
       }
 
       /* ═══════════════════════════ SUCCESS SCREEN ════════════════════ */
+      #successScreen {
+        justify-content: center;
+      }
+
       .success-wrap {
         display: flex;
         flex-direction: column;
@@ -622,8 +686,8 @@
         gap: 14px;
       }
       .success-icon-ring {
-        width: 60px;
-        height: 60px;
+        width: 64px;
+        height: 64px;
         border-radius: 50%;
         background: var(--success-soft);
         border: 1.5px solid rgba(52, 211, 153, 0.35);
@@ -634,11 +698,11 @@
       }
       .success-wrap h2 {
         font-family: var(--fd);
-        font-size: 22px;
+        font-size: 24px;
         font-weight: 700;
       }
       .success-wrap p {
-        font-size: 13.5px;
+        font-size: 14px;
         color: var(--text-2);
         max-width: 280px;
         line-height: 1.6;
@@ -650,7 +714,7 @@
         border-top-color: var(--accent);
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
-        margin-top: 8px;
+        margin-top: 6px;
       }
 
       /* ═══════════════════════════ MODAL ═════════════════════════════ */
@@ -700,7 +764,7 @@
       }
 
       .modal-header {
-        margin-bottom: 20px;
+        margin-bottom: 22px;
       }
       .modal-header h2 {
         font-family: var(--fd);
@@ -719,6 +783,9 @@
         gap: 10px;
         margin-top: 22px;
       }
+      .modal-actions .btn {
+        flex: 1;
+      }
 
       /* forgot success */
       .forgot-success {
@@ -726,14 +793,14 @@
         flex-direction: column;
         align-items: center;
         text-align: center;
-        gap: 14px;
+        gap: 12px;
       }
       .forgot-success.active {
         display: flex;
       }
       .forgot-success-icon {
-        width: 52px;
-        height: 52px;
+        width: 54px;
+        height: 54px;
         border-radius: 50%;
         background: var(--success-soft);
         border: 1.5px solid rgba(52, 211, 153, 0.35);
@@ -741,6 +808,7 @@
         place-items: center;
         color: var(--success);
         font-size: 22px;
+        margin-bottom: 2px;
       }
       .forgot-success h2 {
         font-family: var(--fd);
@@ -763,7 +831,7 @@
       }
 
       /* ═══════════════════════════ RESPONSIVE ════════════════════════ */
-      @media (max-width: 760px) {
+      @media (max-width: 720px) {
         .auth-card {
           grid-template-columns: 1fr;
           max-width: 460px;
@@ -773,7 +841,7 @@
           display: none;
         }
         .panel-right {
-          padding: 32px 22px;
+          padding: 36px 24px;
         }
       }
     </style>
@@ -790,44 +858,23 @@
           <div class="orb orb-1"></div>
           <div class="orb orb-2"></div>
 
-          <div
-            class="lock-wrap"
-            style="
-              display: flex;
-              justify-content: center;
-              margin-bottom: 28px;
-              z-index: 1;
-            "
-          >
-            <div
-              style="
-                width: 80px;
-                height: 80px;
-                border-radius: 50%;
-                background: rgba(124, 58, 237, 0.15);
-                border: 1.5px solid rgba(124, 58, 237, 0.35);
-                display: grid;
-                place-items: center;
-                box-shadow: 0 0 32px rgba(124, 58, 237, 0.2);
-              "
+          <div class="lock-icon-wrap">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="#a78bfa"
+              stroke-width="1.8"
+              stroke-linecap="round"
+              stroke-linejoin="round"
             >
-              <svg
-                width="32"
-                height="32"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#a78bfa"
-                stroke-width="1.8"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              >
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            </div>
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+            </svg>
           </div>
 
-          <div class="welcome-block" style="z-index: 1">
+          <div class="welcome-block">
             <h2>Welcome Back</h2>
             <p>
               Sign in to continue to<br />
@@ -934,15 +981,14 @@
           </button>
 
           <p class="consent-footer">
-            By continuing, you allow this app to access your information<br />
-            in accordance with their
+            By continuing, you allow this app to access your information in
+            accordance with their
             <a href="#">terms of service</a> and <a href="#">privacy policy</a>.
           </p>
         </div>
 
         <!-- ════ LOGIN SCREEN ════ -->
         <div class="screen" id="loginScreen">
-          <!-- Back arrow -->
           <button class="back-arrow" id="btnBackToConsent">
             <svg
               width="15"
@@ -957,45 +1003,17 @@
             Back
           </button>
 
-          <div class="form-header">
-            <h1>Sign in</h1>
-            <p>Enter your credentials to continue.</p>
-          </div>
+          <div class="login-form-center">
+            <div class="form-header">
+              <h1>Sign in</h1>
+              <p>Enter your credentials to continue.</p>
+            </div>
 
-          <!-- API error -->
-          <div class="api-error" id="apiError">
-            <svg
-              width="15"
-              height="15"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <circle cx="12" cy="12" r="10" />
-              <line x1="12" y1="8" x2="12" y2="12" />
-              <line x1="12" y1="16" x2="12.01" y2="16" />
-            </svg>
-            <span id="apiErrorText"
-              >Something went wrong. Please try again.</span
-            >
-          </div>
-
-          <div class="field">
-            <label for="email"
-              >Email address <span style="color: var(--danger)">*</span></label
-            >
-            <input
-              type="email"
-              id="email"
-              placeholder="you@example.com"
-              maxlength="254"
-              autocomplete="email"
-            />
-            <span class="error-msg" id="emailErr">
+            <!-- API error banner -->
+            <div class="api-error" id="apiError">
               <svg
-                width="11"
-                height="11"
+                width="15"
+                height="15"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -1005,100 +1023,120 @@
                 <line x1="12" y1="8" x2="12" y2="12" />
                 <line x1="12" y1="16" x2="12.01" y2="16" />
               </svg>
-              Enter a valid email address
-            </span>
-          </div>
-
-          <div class="field">
-            <label for="password"
-              >Password <span style="color: var(--danger)">*</span></label
-            >
-            <div class="pw-wrap">
-              <input
-                type="password"
-                id="password"
-                placeholder="Enter your password"
-                autocomplete="current-password"
-              />
-              <button
-                type="button"
-                class="pw-toggle"
-                id="togglePw"
-                tabindex="-1"
+              <span id="apiErrorText"
+                >Something went wrong. Please try again.</span
               >
+            </div>
+
+            <!-- Email -->
+            <div class="field">
+              <label for="email"
+                >Email address
+                <span style="color: var(--danger)">*</span></label
+              >
+              <input
+                type="email"
+                id="email"
+                placeholder="you@example.com"
+                maxlength="254"
+                autocomplete="email"
+              />
+              <span class="error-msg" id="emailErr">
                 <svg
-                  width="16"
-                  height="16"
+                  width="11"
+                  height="11"
                   viewBox="0 0 24 24"
                   fill="none"
                   stroke="currentColor"
-                  stroke-width="1.8"
+                  stroke-width="2"
                 >
-                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
-                  <circle cx="12" cy="12" r="3" />
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                Enter a valid email address
+              </span>
+            </div>
+
+            <!-- Password -->
+            <div class="field">
+              <label for="password"
+                >Password <span style="color: var(--danger)">*</span></label
+              >
+              <div class="pw-wrap">
+                <input
+                  type="password"
+                  id="password"
+                  placeholder="Enter your password"
+                  autocomplete="current-password"
+                />
+                <button
+                  type="button"
+                  class="pw-toggle"
+                  id="togglePw"
+                  tabindex="-1"
+                >
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                  >
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                    <circle cx="12" cy="12" r="3" />
+                  </svg>
+                </button>
+              </div>
+              <span class="error-msg" id="passwordErr">
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="8" x2="12" y2="12" />
+                  <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                Password is required
+              </span>
+            </div>
+
+            <!-- Forgot password link -->
+            <div class="forgot-row">
+              <a href="#" class="forgot-link" id="forgotLink"
+                >Forgot password?</a
+              >
+            </div>
+
+            <!-- Submit + signup nudge -->
+            <div class="form-footer-group">
+              <button class="btn btn-primary btn-full" id="btnLogin">
+                Sign in
+                <div class="spinner" id="loginSpinner"></div>
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
                 </svg>
               </button>
+
+              <p class="signup-nudge">
+                Don't have an account?
+                <a href="register-all-in-one.html">Sign up</a>
+              </p>
             </div>
-            <span class="error-msg" id="passwordErr">
-              <svg
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" y1="8" x2="12" y2="12" />
-                <line x1="12" y1="16" x2="12.01" y2="16" />
-              </svg>
-              Password is required
-            </span>
           </div>
-
-          <div class="row-between" style="margin-top: 4px">
-            <span></span>
-            <a href="#" class="forgot-link" id="forgotLink">Forgot password?</a>
-          </div>
-
-          <button
-            class="btn btn-primary btn-full"
-            id="btnLogin"
-            style="margin-top: 20px"
-          >
-            Sign in
-            <div class="spinner" id="loginSpinner"></div>
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </button>
-
-          <div
-            style="
-              text-align: center;
-              margin-top: 22px;
-              font-size: 13px;
-              color: var(--text-2);
-            "
-          >
-            Don't have an account?
-            <a
-              href="register-all-in-one.html"
-              style="
-                color: var(--accent);
-                text-decoration: none;
-                font-weight: 500;
-              "
-              >Sign up</a
-            >
-          </div>
+          <!-- /login-form-center -->
         </div>
 
         <!-- ════ SUCCESS SCREEN ════ -->
@@ -1175,10 +1213,8 @@
           </div>
 
           <div class="modal-actions">
-            <button class="btn btn-ghost" id="btnCancelForgot" style="flex: 1">
-              Cancel
-            </button>
-            <button class="btn btn-primary" id="btnSendReset" style="flex: 1">
+            <button class="btn btn-ghost" id="btnCancelForgot">Cancel</button>
+            <button class="btn btn-primary" id="btnSendReset">
               Send reset link
               <div class="spinner" id="forgotSpinner"></div>
             </button>
@@ -1203,8 +1239,8 @@
 
     <script>
       /* ══════════════════════════════════════════════
-   STATE & UTILS
-══════════════════════════════════════════════ */
+         STATE & UTILS
+      ══════════════════════════════════════════════ */
       const urlParams = new URLSearchParams(window.location.search);
       const clientId = urlParams.get("clientId");
 
@@ -1240,8 +1276,8 @@
       }
 
       /* ══════════════════════════════════════════════
-   SCREEN TRANSITIONS
-══════════════════════════════════════════════ */
+         SCREEN TRANSITIONS
+      ══════════════════════════════════════════════ */
       $("btnConsent").addEventListener("click", () =>
         showScreen("loginScreen"),
       );
@@ -1252,8 +1288,8 @@
       });
 
       /* ══════════════════════════════════════════════
-   PASSWORD TOGGLE
-══════════════════════════════════════════════ */
+         PASSWORD TOGGLE
+      ══════════════════════════════════════════════ */
       $("togglePw").addEventListener("click", () => {
         const ip = $("password");
         const hide = ip.type === "text";
@@ -1264,20 +1300,19 @@
       });
 
       /* ══════════════════════════════════════════════
-   LIVE CLEAR
-══════════════════════════════════════════════ */
+         LIVE CLEAR
+      ══════════════════════════════════════════════ */
       $("email").addEventListener("input", () => clrErr("email", "emailErr"));
       $("password").addEventListener("input", () =>
         clrErr("password", "passwordErr"),
       );
 
       /* ══════════════════════════════════════════════
-   LOGIN SUBMIT
-══════════════════════════════════════════════ */
+         LOGIN SUBMIT
+      ══════════════════════════════════════════════ */
       $("btnLogin").addEventListener("click", async () => {
         const email = $("email").value.trim();
         const password = $("password").value;
-
         const emailOk = isValidEmail(email);
         const pwOk = password.length >= 1;
         setErr("email", "emailErr", !emailOk);
@@ -1336,8 +1371,8 @@
       });
 
       /* ══════════════════════════════════════════════
-   FORGOT PASSWORD MODAL
-══════════════════════════════════════════════ */
+         FORGOT PASSWORD MODAL
+      ══════════════════════════════════════════════ */
       let countdownInterval = null;
 
       function openForgotModal() {
@@ -1395,7 +1430,6 @@
             );
           }
 
-          // Show success
           $("forgotFormView").style.display = "none";
           $("forgotEmailDisplay").textContent = email;
           $("forgotSuccessView").classList.add("active");
