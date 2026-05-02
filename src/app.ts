@@ -4,6 +4,9 @@ import cookieParser from "cookie-parser";
 import { clientRouter } from "./modules/client/client.routes";
 import { authRouter } from "./modules/auth/auth.routes";
 import path from "path";
+import ApiResponse from "./common/utils/api-response.utils";
+import jose from "node-jose";
+import { PUBLIC_KEY } from "./common/utils/cert";
 
 export const app = express();
 app.use(express.json());
@@ -14,6 +17,38 @@ app.use(express.static(path.resolve("public")));
 
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
+});
+app.get("/.well-known/openid-configuration", (req, res) => {
+  res.json({
+    issuer: "http://localhost:3000",
+    authorization_endpoint: "http://localhost:3000/auth/login",
+    token_endpoint: "http://localhost:3000/auth/token",
+    userinfo_endpoint: "http://localhost:3000/auth/userinfo",
+    jwks_uri: "http://localhost:3000/.well-known/jwks.json",
+    registration_endpoint: "http://localhost:3000/client/register",
+    scopes_supported: ["openid", "profile", "email"],
+    response_types_supported: ["code"],
+    response_modes_supported: ["query"],
+    grant_types_supported: ["authorization_code", "refresh_token"],
+    subject_types_supported: ["public"],
+    id_token_signing_alg_values_supported: ["RS256"],
+    token_endpoint_auth_methods_supported: ["client_secret_post"],
+    claims_supported: [
+      "sub",
+      "iss",
+      "email",
+      "email_verified",
+      "given_name",
+      "family_name",
+      "name",
+      "picture",
+    ],
+    code_challenge_methods_supported: [],
+  });
+});
+app.get("/.well-known/jwks.json", async (_, res) => {
+  const key = await jose.JWK.asKey(PUBLIC_KEY, "pem");
+  res.json({ keys: [key.toJSON()] });
 });
 app.use("/client", clientRouter);
 app.use("/auth", authRouter);
