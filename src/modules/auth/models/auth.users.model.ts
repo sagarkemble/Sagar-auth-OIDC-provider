@@ -6,16 +6,14 @@ import {
   boolean,
   timestamp,
   date,
-  pgEnum,
 } from "drizzle-orm/pg-core";
 
-const genderEnum = pgEnum("gender", ["male", "female", "other"]);
 const usersTable = pgTable("users", {
   id: uuid("id").primaryKey().defaultRandom(),
   firstName: varchar("first_name", { length: 50 }).notNull(),
   lastName: varchar("last_name", { length: 50 }).notNull(),
   email: varchar("email", { length: 254 }).notNull().unique(),
-  gender: genderEnum("gender"),
+  gender: varchar("gender", { length: 20 }),
   dateOfBirth: date("date_of_birth"),
   password: text("password").notNull(),
   avatarUrl: text("avatar_url").default(
