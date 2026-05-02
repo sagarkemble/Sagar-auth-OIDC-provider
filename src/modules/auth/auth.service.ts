@@ -235,7 +235,7 @@ const refreshToken = async function (
       refreshTokenExpiresAt,
     })
     .where(eq(userCodesTable.refreshToken, hashedRefreshToken));
-  return { accessToken, refreshToken };
+  return { accessToken, refreshToken: newRefreshToken };
 };
 
 const forgotPassword = async function (email: string) {
