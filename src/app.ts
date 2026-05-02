@@ -7,6 +7,7 @@ import path from "path";
 import ApiResponse from "./common/utils/api-response.utils";
 import jose from "node-jose";
 import { PUBLIC_KEY } from "./common/utils/cert";
+import cors from "cors";
 
 export const app = express();
 const landingPagePath = path.resolve("public", "html", "landing-page.html");
@@ -15,6 +16,7 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.resolve("public")));
+app.use(cors());
 
 app.get("/", (req, res) => {
   ApiResponse.html(res, landingPagePath, "success");
