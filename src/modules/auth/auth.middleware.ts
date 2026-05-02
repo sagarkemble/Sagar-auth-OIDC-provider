@@ -4,6 +4,8 @@ import clientTable from "../client/client.model";
 import { eq } from "drizzle-orm";
 import ApiError from "../../common/utils/api-error.utils";
 import * as cryptoUtils from "../../common/utils/crypto";
+import ApiResponse from "../../common/utils/api-response.utils";
+import path from "path";
 
 const verifyClientId = async function (
   req: Request,
@@ -11,8 +13,9 @@ const verifyClientId = async function (
   next: NextFunction,
 ) {
   const { clientId } = req.query;
+  const htmlPath = path.resolve("public", "html", "unauthorized.html");
   if (!clientId || typeof clientId !== "string") {
-    throw ApiError.badRequest("clientId is required and must be a string");
+    return ApiResponse.html(res, htmlPath, "error");
   }
   const hashedClientId = await cryptoUtils.hashContent(clientId);
 
@@ -21,7 +24,7 @@ const verifyClientId = async function (
     .from(clientTable)
     .where(eq(clientTable.clientId, hashedClientId));
   if (!isValidClientId) {
-    throw ApiError.badRequest("Invalid clientId");
+    return ApiResponse.html(res, htmlPath, "error");
   }
   req.clientInfo = {
     clientId,

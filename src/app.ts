@@ -19,13 +19,14 @@ app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 app.get("/.well-known/openid-configuration", (req, res) => {
+  const baseUrl = process.env.SERVER_URL;
   res.json({
-    issuer: "http://localhost:3000",
-    authorization_endpoint: "http://localhost:3000/auth/login",
-    token_endpoint: "http://localhost:3000/auth/token",
-    userinfo_endpoint: "http://localhost:3000/auth/userinfo",
-    jwks_uri: "http://localhost:3000/.well-known/jwks.json",
-    registration_endpoint: "http://localhost:3000/client/register",
+    issuer: baseUrl,
+    authorization_endpoint: `${baseUrl}/auth/login`,
+    token_endpoint: `${baseUrl}/auth/token`,
+    userinfo_endpoint: `${baseUrl}/auth/userinfo`,
+    jwks_uri: `${baseUrl}/.well-known/jwks.json`,
+    registration_endpoint: `${baseUrl}/client/register`,
     scopes_supported: ["openid", "profile", "email"],
     response_types_supported: ["code"],
     response_modes_supported: ["query"],

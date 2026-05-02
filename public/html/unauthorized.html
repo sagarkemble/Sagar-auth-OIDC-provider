@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Access Blocked — Sagar Auth</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bg: #09090b;
+        --surface: #18181b;
+        --surface2: #27272a;
+        --border: #3f3f46;
+        --text: #fafafa;
+        --text-2: #a1a1aa;
+        --text-3: #71717a;
+        --accent: #7c3aed;
+        --danger: #f87171;
+        --danger-soft: rgba(248, 113, 113, 0.1);
+        --fd: "Syne", sans-serif;
+        --fb: "DM Sans", sans-serif;
+        --fm: "DM Mono", monospace;
+        --r: 10px;
+        --r-lg: 14px;
+        --r-xl: 18px;
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: var(--fb);
+        background: var(--bg);
+        color: var(--text);
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        padding: 24px;
+        line-height: 1.5;
+      }
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        background:
+          radial-gradient(
+            ellipse 70% 55% at 25% 10%,
+            rgba(248, 113, 113, 0.1) 0%,
+            transparent 60%
+          ),
+          radial-gradient(
+            ellipse 55% 45% at 75% 90%,
+            rgba(239, 68, 68, 0.07) 0%,
+            transparent 55%
+          );
+        pointer-events: none;
+      }
+
+      /* ── CARD ── */
+      .error-card {
+        position: relative;
+        z-index: 1;
+        width: 100%;
+        max-width: 480px;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: var(--r-xl);
+        padding: 48px 44px 44px;
+        text-align: center;
+        box-shadow:
+          0 32px 80px rgba(0, 0, 0, 0.6),
+          0 0 0 1px rgba(255, 255, 255, 0.04);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0;
+      }
+
+      /* ── LOGO ── */
+      .logo {
+        font-family: var(--fd);
+        font-weight: 800;
+        font-size: 18px;
+        letter-spacing: -0.5px;
+        color: #fff;
+        user-select: none;
+        margin-bottom: 36px;
+      }
+      .logo .acc {
+        color: var(--accent);
+      }
+
+      /* ── ICON ── */
+      .icon-wrap {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--danger-soft);
+        border: 1.5px solid rgba(248, 113, 113, 0.3);
+        display: grid;
+        place-items: center;
+        box-shadow: 0 0 32px rgba(248, 113, 113, 0.15);
+        margin-bottom: 24px;
+        color: var(--danger);
+        flex-shrink: 0;
+      }
+
+      /* ── TEXT ── */
+      h1 {
+        font-family: var(--fd);
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--text);
+        line-height: 1.2;
+        margin-bottom: 10px;
+      }
+
+      .error-code {
+        display: inline-block;
+        font-family: var(--fm);
+        font-size: 12px;
+        color: var(--danger);
+        background: var(--danger-soft);
+        border: 1px solid rgba(248, 113, 113, 0.2);
+        border-radius: 6px;
+        padding: 4px 10px;
+        letter-spacing: 0.04em;
+        margin-bottom: 16px;
+      }
+
+      .desc {
+        font-size: 14px;
+        color: var(--text-2);
+        line-height: 1.7;
+        max-width: 360px;
+        margin-bottom: 28px;
+      }
+
+      /* ── DETAILS BOX ── */
+      .details-box {
+        width: 100%;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--r-lg);
+        padding: 18px 20px;
+        text-align: left;
+        margin-bottom: 28px;
+      }
+      .details-box h3 {
+        font-size: 11px;
+        font-weight: 600;
+        color: var(--text-3);
+        text-transform: uppercase;
+        letter-spacing: 0.07em;
+        margin-bottom: 14px;
+      }
+      .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--text-2);
+        padding: 7px 0;
+        line-height: 1.5;
+      }
+      .detail-item + .detail-item {
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+      }
+      .detail-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: rgba(248, 113, 113, 0.5);
+        flex-shrink: 0;
+      }
+
+      /* ── FOOTER ── */
+      .footer-note {
+        font-size: 12px;
+        color: var(--text-3);
+        line-height: 1.7;
+      }
+      .footer-note a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .footer-note a:hover {
+        text-decoration: underline;
+      }
+
+      @media (max-width: 520px) {
+        .error-card {
+          padding: 40px 24px 36px;
+        }
+        h1 {
+          font-size: 22px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-card">
+      <div class="logo">Sagar<span class="acc">Auth</span></div>
+
+      <!-- Icon: shield with X -->
+      <div class="icon-wrap">
+        <svg
+          width="36"
+          height="36"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <path
+            d="M12 2L3 6v6c0 5.25 3.75 10.15 9 11.25C17.25 22.15 21 17.25 21 12V6L12 2z"
+          />
+          <line x1="9" y1="9" x2="15" y2="15" />
+          <line x1="15" y1="9" x2="9" y2="15" />
+        </svg>
+      </div>
+
+      <h1>Access Blocked</h1>
+      <span class="error-code">UNAUTHORIZED_CLIENT</span>
+
+      <p class="desc">
+        The application requesting access is not authorized or has invalid
+        credentials. Please contact the application owner for assistance.
+      </p>
+
+      <div class="details-box">
+        <h3>Possible reasons</h3>
+        <div class="detail-item">
+          <div class="detail-dot"></div>
+          <span>Invalid or missing client ID</span>
+        </div>
+        <div class="detail-item">
+          <div class="detail-dot"></div>
+          <span>Client application is not registered</span>
+        </div>
+        <div class="detail-item">
+          <div class="detail-dot"></div>
+          <span>Redirect URL mismatch or not configured</span>
+        </div>
+        <div class="detail-item">
+          <div class="detail-dot"></div>
+          <span>Client credentials have been revoked</span>
+        </div>
+      </div>
+
+      <p class="footer-note">Need help? <a href="#">Contact Support</a></p>
+    </div>
+  </body>
+</html>

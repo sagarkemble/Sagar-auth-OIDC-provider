@@ -24,7 +24,7 @@ class ApiResponse {
     type: "error" | "success" = "success",
   ) {
     res.setHeader("Content-Type", "text/html");
-    if (type === "error") return res.status(400).send(html);
+    if (type === "error") return res.status(400).sendFile(html);
     else return res.status(200).sendFile(html);
   }
 }
