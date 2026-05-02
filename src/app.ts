@@ -9,12 +9,16 @@ import jose from "node-jose";
 import { PUBLIC_KEY } from "./common/utils/cert";
 
 export const app = express();
+const landingPagePath = path.resolve("public", "html", "landing-page.html");
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.static(path.resolve("public")));
 
+app.get("/", (req, res) => {
+  ApiResponse.html(res, landingPagePath, "success");
+});
 app.get("/health", (req, res) => {
   res.status(200).json({ status: "ok" });
 });
@@ -53,4 +57,8 @@ app.get("/.well-known/jwks.json", async (_, res) => {
 });
 app.use("/client", clientRouter);
 app.use("/auth", authRouter);
+app.use((req, res) => {
+  const filePath = path.resolve("public", "html", "not-found.html");
+  ApiResponse.html(res, filePath, "error");
+});
 app.use(globalErrorHandler);

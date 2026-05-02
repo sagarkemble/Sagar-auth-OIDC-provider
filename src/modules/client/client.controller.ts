@@ -4,14 +4,7 @@ import ApiResponse from "../../common/utils/api-response.utils";
 import * as clientService from "./client.service";
 
 const getRegister = (req: Request, res: Response) => {
-  const filePath = path.resolve(
-    "src",
-    "modules",
-    "client",
-    "templates",
-    "pages",
-    "register.html",
-  );
+  const filePath = path.resolve("public", "html", "register-client.html");
   ApiResponse.html(res, filePath, "success");
 };
 
