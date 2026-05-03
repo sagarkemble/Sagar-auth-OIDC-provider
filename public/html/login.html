@@ -11,7 +11,6 @@
       rel="stylesheet"
     />
     <style>
-      /* ═══════════════════════════ TOKENS ═══════════════════════════ */
       :root {
         --bg: #09090b;
         --surface: #18181b;
@@ -39,7 +38,6 @@
         --fm: "DM Mono", monospace;
       }
 
-      /* ═══════════════════════════ RESET ═════════════════════════════ */
       *,
       *::before,
       *::after {
@@ -80,7 +78,6 @@
         pointer-events: none;
       }
 
-      /* ═══════════════════════════ CARD ══════════════════════════════ */
       .auth-card {
         position: relative;
         z-index: 1;
@@ -98,7 +95,6 @@
           0 0 0 1px rgba(255, 255, 255, 0.04);
       }
 
-      /* ═══════════════════════════ LEFT PANEL ════════════════════════ */
       .panel-left {
         position: relative;
         background: linear-gradient(
@@ -155,7 +151,6 @@
         color: var(--accent);
       }
 
-      /* left panel content */
       .left-body {
         flex: 1;
         display: flex;
@@ -167,7 +162,6 @@
         gap: 0;
       }
 
-      /* decorative orbs on left panel */
       .orb {
         position: absolute;
         border-radius: 50%;
@@ -198,7 +192,6 @@
         right: 16px;
       }
 
-      /* lock icon */
       .lock-icon-wrap {
         width: 80px;
         height: 80px;
@@ -214,7 +207,6 @@
         flex-shrink: 0;
       }
 
-      /* welcome text */
       .welcome-block {
         text-align: center;
         z-index: 1;
@@ -239,7 +231,6 @@
         font-weight: 500;
       }
 
-      /* stat pills */
       .stat-row {
         display: flex;
         gap: 6px;
@@ -280,7 +271,6 @@
         color: #a78bfa;
       }
 
-      /* ═══════════════════════════ RIGHT PANEL ═══════════════════════ */
       .panel-right {
         padding: 44px 48px;
         display: flex;
@@ -289,7 +279,6 @@
         overflow-y: auto;
       }
 
-      /* ═══════════════════════════ SCREENS ══════════════════════════ */
       .screen {
         display: none;
         flex-direction: column;
@@ -311,7 +300,6 @@
         }
       }
 
-      /* back arrow */
       .back-arrow {
         display: inline-flex;
         align-items: center;
@@ -337,7 +325,6 @@
         transform: translateX(-3px);
       }
 
-      /* ═══════════════════════════ CONSENT SCREEN ════════════════════ */
       #consentScreen {
         justify-content: center;
       }
@@ -418,7 +405,6 @@
         text-decoration: underline;
       }
 
-      /* ═══════════════════════════ LOGIN SCREEN ══════════════════════ */
       #loginScreen {
         justify-content: flex-start;
         position: relative;
@@ -455,7 +441,6 @@
         line-height: 1.55;
       }
 
-      /* fields */
       .field {
         display: flex;
         flex-direction: column;
@@ -490,7 +475,6 @@
         color: var(--muted);
       }
 
-      /* Autofill styling */
       input:-webkit-autofill,
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus,
@@ -546,7 +530,6 @@
         display: flex;
       }
 
-      /* forgot link row */
       .forgot-row {
         display: flex;
         justify-content: flex-end;
@@ -564,7 +547,6 @@
         text-decoration: underline;
       }
 
-      /* divider between fields + submit */
       .form-footer-group {
         margin-top: 8px;
         display: flex;
@@ -572,7 +554,6 @@
         gap: 16px;
       }
 
-      /* signup nudge */
       .signup-nudge {
         text-align: center;
         font-size: 13px;
@@ -587,7 +568,6 @@
         text-decoration: underline;
       }
 
-      /* ═══════════════════════════ BUTTONS ═══════════════════════════ */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -630,7 +610,6 @@
         width: 100%;
       }
 
-      /* ═══════════════════════════ API ERROR BANNER ══════════════════ */
       .api-error {
         display: none;
         align-items: flex-start;
@@ -652,7 +631,6 @@
         margin-top: 1px;
       }
 
-      /* ═══════════════════════════ SPINNER ═══════════════════════════ */
       .spinner {
         width: 15px;
         height: 15px;
@@ -672,7 +650,6 @@
         }
       }
 
-      /* ═══════════════════════════ SUCCESS SCREEN ════════════════════ */
       #successScreen {
         justify-content: center;
       }
@@ -718,7 +695,6 @@
         margin-top: 6px;
       }
 
-      /* ═══════════════════════════ MODAL ═════════════════════════════ */
       .modal-overlay {
         position: fixed;
         inset: 0;
@@ -788,7 +764,6 @@
         flex: 1;
       }
 
-      /* forgot success */
       .forgot-success {
         display: none;
         flex-direction: column;
@@ -831,7 +806,6 @@
         font-weight: 600;
       }
 
-      /* ═══════════════════════════ RESPONSIVE ════════════════════════ */
       @media (max-width: 720px) {
         .auth-card {
           grid-template-columns: 1fr;
@@ -848,9 +822,7 @@
     </style>
   </head>
   <body>
-    <!-- ══════════════ CARD ══════════════ -->
     <div class="auth-card">
-      <!-- ── LEFT PANEL ── -->
       <div class="panel-left">
         <div class="grid-lines"></div>
         <div class="logo">Sagar<span class="acc">Auth</span></div>
@@ -935,9 +907,7 @@
         </div>
       </div>
 
-      <!-- ── RIGHT PANEL ── -->
       <div class="panel-right">
-        <!-- ════ CONSENT SCREEN ════ -->
         <div class="screen active" id="consentScreen">
           <h1 class="consent-title">
             Continue to<br />
@@ -988,7 +958,6 @@
           </p>
         </div>
 
-        <!-- ════ LOGIN SCREEN ════ -->
         <div class="screen" id="loginScreen">
           <button class="back-arrow" id="btnBackToConsent">
             <svg
@@ -1010,7 +979,6 @@
               <p>Enter your credentials to continue.</p>
             </div>
 
-            <!-- API error banner -->
             <div class="api-error" id="apiError">
               <svg
                 width="15"
@@ -1029,7 +997,6 @@
               >
             </div>
 
-            <!-- Email -->
             <div class="field">
               <label for="email"
                 >Email address
@@ -1059,7 +1026,6 @@
               </span>
             </div>
 
-            <!-- Password -->
             <div class="field">
               <label for="password"
                 >Password <span style="color: var(--danger)">*</span></label
@@ -1107,14 +1073,12 @@
               </span>
             </div>
 
-            <!-- Forgot password link -->
             <div class="forgot-row">
               <a href="#" class="forgot-link" id="forgotLink"
                 >Forgot password?</a
               >
             </div>
 
-            <!-- Submit + signup nudge -->
             <div class="form-footer-group">
               <button class="btn btn-primary btn-full" id="btnLogin">
                 Sign in
@@ -1137,10 +1101,8 @@
               </p>
             </div>
           </div>
-          <!-- /login-form-center -->
         </div>
 
-        <!-- ════ SUCCESS SCREEN ════ -->
         <div class="screen" id="successScreen">
           <div class="success-wrap">
             <div class="success-icon-ring">✓</div>
@@ -1155,11 +1117,8 @@
           </div>
         </div>
       </div>
-      <!-- /panel-right -->
     </div>
-    <!-- /auth-card -->
 
-    <!-- ══════════════ FORGOT PASSWORD MODAL ══════════════ -->
     <div class="modal-overlay" id="forgotModal">
       <div class="modal">
         <!-- Form view -->
@@ -1222,7 +1181,6 @@
           </div>
         </div>
 
-        <!-- Success view -->
         <div class="forgot-success" id="forgotSuccessView">
           <div class="forgot-success-icon">✓</div>
           <h2>Email sent!</h2>
@@ -1239,9 +1197,6 @@
     </div>
 
     <script>
-      /* ══════════════════════════════════════════════
-         STATE & UTILS
-      ══════════════════════════════════════════════ */
       const urlParams = new URLSearchParams(window.location.search);
       const clientId = urlParams.get("clientId");
 
@@ -1276,9 +1231,6 @@
         $(bannerId).classList.remove("visible");
       }
 
-      /* ══════════════════════════════════════════════
-         SCREEN TRANSITIONS
-      ══════════════════════════════════════════════ */
       $("btnConsent").addEventListener("click", () =>
         showScreen("loginScreen"),
       );
@@ -1288,9 +1240,6 @@
         showScreen("consentScreen");
       });
 
-      /* ══════════════════════════════════════════════
-         PASSWORD TOGGLE
-      ══════════════════════════════════════════════ */
       $("togglePw").addEventListener("click", () => {
         const ip = $("password");
         const hide = ip.type === "text";
@@ -1300,17 +1249,11 @@
           : `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`;
       });
 
-      /* ══════════════════════════════════════════════
-         LIVE CLEAR
-      ══════════════════════════════════════════════ */
       $("email").addEventListener("input", () => clrErr("email", "emailErr"));
       $("password").addEventListener("input", () =>
         clrErr("password", "passwordErr"),
       );
 
-      /* ══════════════════════════════════════════════
-         LOGIN SUBMIT
-      ══════════════════════════════════════════════ */
       $("btnLogin").addEventListener("click", async () => {
         const email = $("email").value.trim();
         const password = $("password").value;
@@ -1371,9 +1314,6 @@
         }
       });
 
-      /* ══════════════════════════════════════════════
-         FORGOT PASSWORD MODAL
-      ══════════════════════════════════════════════ */
       let countdownInterval = null;
 
       function openForgotModal() {

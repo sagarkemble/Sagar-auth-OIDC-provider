@@ -47,7 +47,6 @@
         overflow: hidden;
       }
 
-      /* Background noise + subtle gradient */
       body::before {
         content: "";
         position: fixed;
@@ -84,7 +83,6 @@
           0 0 0 1px rgba(255, 255, 255, 0.04);
       }
 
-      /* ───── LEFT PANEL ───── */
       .panel-left {
         position: relative;
         background: linear-gradient(
@@ -129,7 +127,6 @@
         color: var(--accent);
       }
 
-      /* geometric grid lines decorative */
       .grid-lines {
         position: absolute;
         inset: 0;
@@ -223,7 +220,6 @@
         color: #a78bfa;
       }
 
-      /* ───── RIGHT PANEL ───── */
       .panel-right {
         padding: 44px 48px 44px;
         display: flex;
@@ -249,7 +245,6 @@
         line-height: 1.55;
       }
 
-      /* Progress bar */
       .progress-track {
         height: 2px;
         background: var(--surface2);
@@ -264,7 +259,6 @@
         transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* Form steps */
       .form-step {
         display: none;
         flex-direction: column;
@@ -287,7 +281,6 @@
         }
       }
 
-      /* Field */
       .field {
         display: flex;
         flex-direction: column;
@@ -350,7 +343,6 @@
         line-height: 1.55;
       }
 
-      /* Char counter */
       .field-meta {
         display: flex;
         justify-content: space-between;
@@ -365,7 +357,6 @@
         color: var(--danger);
       }
 
-      /* URL hint badge */
       .input-wrapper {
         position: relative;
       }
@@ -384,7 +375,6 @@
         padding-left: 14px;
       }
 
-      /* Buttons */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -434,7 +424,6 @@
         padding-top: 24px;
       }
 
-      /* Success screen */
       .success-screen {
         display: none;
         flex-direction: column;
@@ -525,7 +514,6 @@
         max-width: 640px;
       }
 
-      /* Loading spinner */
       .spinner {
         width: 16px;
         height: 16px;
@@ -544,7 +532,6 @@
         }
       }
 
-      /* API error banner */
       .api-error {
         display: none;
         align-items: center;
@@ -577,7 +564,6 @@
   </head>
   <body>
     <div class="card">
-      <!-- LEFT -->
       <div class="panel-left">
         <div class="grid-lines"></div>
         <div class="logo">Sagar<span>Auth</span></div>
@@ -611,7 +597,6 @@
         </div>
       </div>
 
-      <!-- RIGHT -->
       <div class="panel-right">
         <div class="form-header">
           <h1 id="stepTitle">App Identity</h1>
@@ -635,7 +620,6 @@
           <span id="apiErrorText">Something went wrong. Please try again.</span>
         </div>
 
-        <!-- STEP 1 -->
         <div class="form-step active" id="step1">
           <div class="field">
             <label for="appName"
@@ -704,7 +688,6 @@
           </div>
         </div>
 
-        <!-- STEP 2 -->
         <div class="form-step" id="step2">
           <div class="field">
             <label for="appUrl"
@@ -782,7 +765,6 @@
           </div>
         </div>
 
-        <!-- STEP 3 — Review -->
         <div class="form-step" id="step3">
           <div style="display: flex; flex-direction: column; gap: 10px">
             <p
@@ -803,13 +785,10 @@
                 border-radius: 12px;
                 overflow: hidden;
               "
-            >
-              <!-- rows injected by JS -->
-            </div>
+            ></div>
           </div>
         </div>
 
-        <!-- SUCCESS -->
         <div class="success-screen" id="successScreen">
           <div class="success-icon">✓</div>
           <h2>Client registered!</h2>
@@ -863,7 +842,6 @@
           </button>
         </div>
 
-        <!-- ACTIONS -->
         <div class="actions" id="actions">
           <button
             class="btn btn-ghost"
@@ -911,7 +889,6 @@
         "Everything look good? Submit to register your client and receive credentials.",
       ];
 
-      // ── Char counters ──
       function wireCounter(inputId, countId, max) {
         const el = document.getElementById(inputId);
         const ct = document.getElementById(countId);
@@ -924,7 +901,6 @@
       wireCounter("appName", "appNameCount", 50);
       wireCounter("appDesc", "appDescCount", 200);
 
-      // ── Validation helpers ──
       function isValidUrl(str) {
         try {
           const u = new URL(str);
@@ -1003,14 +979,11 @@
         return true;
       }
 
-      // ── Navigation ──
       function updateUI() {
-        // Steps display
         for (let i = 1; i <= TOTAL_STEPS; i++) {
           const el = document.getElementById(`step${i}`);
           if (el) el.classList.toggle("active", i === currentStep);
         }
-        // Left panel step list
         document.querySelectorAll("#stepList .step-item").forEach((li) => {
           const s = +li.dataset.step;
           li.className =
@@ -1021,15 +994,12 @@
                 ? "done"
                 : "pending");
         });
-        // Progress bar
         document.getElementById("progressFill").style.width =
           `${(currentStep / TOTAL_STEPS) * 100}%`;
-        // Title
         document.getElementById("stepTitle").textContent =
           titles[currentStep - 1];
         document.getElementById("stepDesc").textContent =
           descs[currentStep - 1];
-        // Buttons
         document.getElementById("btnBack").style.display =
           currentStep > 1 ? "inline-flex" : "none";
         const btn = document.getElementById("btnNext");
@@ -1090,7 +1060,6 @@
         }
       }
 
-      // ── Submit ──
       async function submitForm() {
         const payload = {
           applicationName: document.getElementById("appName").value.trim(),
@@ -1138,7 +1107,6 @@
               (body.data.clientSecret || body.data.client_secret)) ||
             "";
 
-          // Hide form, show success
           for (let i = 1; i <= TOTAL_STEPS; i++) {
             const el = document.getElementById(`step${i}`);
             if (el) el.classList.remove("active");
@@ -1151,29 +1119,24 @@
           document.getElementById("clientSecretVal").textContent =
             clientSecret || "(see your dashboard)";
 
-          // enable copy buttons
           initCopyButtons();
 
-          // Update left panel
           document
             .querySelectorAll("#stepList .step-item")
             .forEach((li) => (li.className = "step-item done"));
         } catch (e) {
-          // If we received a parsed JSON error object, handle structured errors
           if (e && e._structured) {
             const err = e.payload;
             const code = err.code;
             const message = err.message || "Something went wrong.";
             const details = Array.isArray(err.details) ? err.details : [];
 
-            // Reset field errors
             setError("appName", "appNameErr", false);
             setError("appDesc", "appDescErr", false);
             setError("appUrl", "appUrlErr", false);
             setError("redirectUrl", "redirectUrlErr", false);
 
             if (code === "BAD_REQUEST" || code === "INVALID_REQUEST") {
-              // details expected as [{ path: ['applicationName'], message: '...' }, ...]
               details.forEach((d) => {
                 const path = Array.isArray(d.path) ? d.path[0] : d.path;
                 const msg = d.message || "Invalid";
@@ -1200,10 +1163,9 @@
               document.getElementById("apiErrorText").textContent = message;
               document.getElementById("apiError").classList.add("visible");
             } else if (code === "CONFLICT") {
-              // Common conflict: duplicate application name / url / redirect
               document.getElementById("apiErrorText").textContent = message;
               document.getElementById("apiError").classList.add("visible");
-              // try to highlight name field if message mentions name
+
               if (/(name|application name)/i.test(message)) {
                 setError("appName", "appNameErr", true);
                 document.getElementById("appNameErr").textContent = message;
@@ -1223,7 +1185,6 @@
         }
       }
 
-      // Copy helper
       function initCopyButtons() {
         document.querySelectorAll(".copy-btn").forEach((btn) => {
           btn.addEventListener("click", async (ev) => {
@@ -1243,7 +1204,6 @@
                 t.textContent = prev;
               }, 1600);
             } catch {
-              // fallback
               const range = document.createRange();
               range.selectNodeContents(el);
               const sel = window.getSelection();
@@ -1267,7 +1227,6 @@
         });
       }
 
-      // Init
       updateUI();
     </script>
   </body>

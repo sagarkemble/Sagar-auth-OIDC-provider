@@ -1,7 +1,7 @@
 <div align="center">
-  <img src="./public/favicon.png" style="height:5rem" />
+  <img src="./public/demo.png" />
 
-# OIDC Provider
+# SagarAuth OIDC Provider
 
 </div>
 
@@ -18,13 +18,13 @@
   <a href="#"><img src="https://img.shields.io/badge/Commitlint-000000?style=for-the-badge&logo=git&logoColor=white" alt="Commitlint" /></a>
 </p>
 
-A production-ready **OpenID Connect (OIDC) provider** built with TypeScript, Bun, Express, and PostgreSQL. Implements the Authorization Code flow with RS256-signed JWTs, full user lifecycle management, and a built-in UI for registration, login, and client management.
+A production-ready **OpenID Connect (OIDC) provider** Implements the Oauth2 and OpenID Connect with Authorization Code flow with RS256-signed JWTs, full user lifecycle management, and a built-in UI for registration, login, and client management.
 
 ---
 
 ## Features
 
-- **OIDC Authorization Code Flow** — full `/authorize → /token → /userinfo` pipeline
+- **OIDC Authorization Code Flow** — full `/authorize -> /token => /userinfo` pipeline
 - **RS256 JWT** — access tokens signed with an asymmetric RSA key pair; public key exposed via `/.well-known/jwks.json`
 - **OpenID Discovery** — `/.well-known/openid-configuration` endpoint for auto-configuration
 - **Client Registration** — register OAuth applications with `clientId` / `clientSecret`
@@ -36,14 +36,6 @@ A production-ready **OpenID Connect (OIDC) provider** built with TypeScript, Bun
 - **Built-in UI** — register, login, verify email, reset password, and client registration pages served as static HTML
 - **Docker** — one-command PostgreSQL setup with Docker Compose
 - **Conventional Commits** — Commitizen + Commitlint + Husky enforced
-
----
-
-## Prerequisites
-
-- [Bun](https://bun.sh/) v1.0+
-- [Docker](https://www.docker.com/) & Docker Compose
-- A [Resend](https://resend.com/) account for transactional email
 
 ---
 
@@ -167,7 +159,7 @@ oidc-provider/
 
 ---
 
-## API Reference
+## API Documentation
 
 ### Well-Known Endpoints
 

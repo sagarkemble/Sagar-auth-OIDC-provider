@@ -6,13 +6,7 @@
     <link rel="icon" type="image/png" href="/favicon.png" />
     <title>Create Account — Sagar Auth</title>
     <style>
-      /* ═══════════════════════════════════════════════
-   Sagar Auth — Shared Stylesheet
-   ═══════════════════════════════════════════════ */
-
       @import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap");
-
-      /* ── Tokens ── */
       :root {
         --bg: #09090b;
         --surface: #18181b;
@@ -44,7 +38,6 @@
         --font-mono: "DM Mono", monospace;
       }
 
-      /* ── Reset ── */
       *,
       *::before,
       *::after {
@@ -87,7 +80,6 @@
         pointer-events: none;
       }
 
-      /* ── Card Shell ── */
       .auth-card {
         position: relative;
         z-index: 1;
@@ -103,7 +95,6 @@
         box-shadow: var(--shadow-card);
       }
 
-      /* ── Left Panel ── */
       .panel-left {
         position: relative;
         background: linear-gradient(
@@ -147,7 +138,6 @@
         background-size: 40px 40px;
       }
 
-      /* ── Logo ── */
       .logo {
         font-family: var(--font-display);
         font-weight: 800;
@@ -161,7 +151,6 @@
         color: var(--accent);
       }
 
-      /* ── Step List (left) ── */
       .step-visual {
         flex: 1;
         display: flex;
@@ -244,7 +233,6 @@
         color: #a78bfa;
       }
 
-      /* ── Right Panel ── */
       .panel-right {
         padding: 40px 44px 40px;
         display: flex;
@@ -253,7 +241,6 @@
         overflow-y: auto;
       }
 
-      /* ── Form Header ── */
       .form-header {
         margin-bottom: 24px;
       }
@@ -285,7 +272,6 @@
         text-decoration: underline;
       }
 
-      /* ── Progress Bar ── */
       .progress-track {
         height: 2px;
         background: var(--surface2);
@@ -300,7 +286,6 @@
         transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
       }
 
-      /* ── Step Panels ── */
       .form-step {
         display: none;
         flex-direction: column;
@@ -323,7 +308,6 @@
         }
       }
 
-      /* ── Field ── */
       .field {
         display: flex;
         flex-direction: column;
@@ -366,7 +350,6 @@
         color: var(--muted);
       }
 
-      /* Autofill styling */
       input:-webkit-autofill,
       input:-webkit-autofill:hover,
       input:-webkit-autofill:focus,
@@ -376,7 +359,6 @@
         border: 1px solid var(--border) !important;
       }
 
-      /* Date input placeholder color - when empty */
       input[type="date"] {
         color: var(--muted);
       }
@@ -388,7 +370,6 @@
         color: var(--muted);
       }
 
-      /* Show selected date in normal text color */
       input[type="date"]:valid,
       input[type="date"]:focus {
         color: var(--text);
@@ -405,7 +386,6 @@
         color: var(--text);
       }
 
-      /* Select placeholder color */
       select {
         color: var(--muted);
       }
@@ -415,7 +395,6 @@
         color: var(--text);
       }
 
-      /* Style the placeholder option specifically */
       select option[value=""] {
         color: var(--muted);
       }
@@ -455,7 +434,6 @@
         line-height: 1.6;
       }
 
-      /* ── Error / Hint ── */
       .field-meta {
         display: flex;
         justify-content: space-between;
@@ -478,7 +456,6 @@
         margin-top: 2px;
       }
 
-      /* ── Password Strength ── */
       .strength-bar {
         display: flex;
         gap: 4px;
@@ -499,7 +476,6 @@
         transition: color 0.3s;
       }
 
-      /* ── Avatar Upload ── */
       .avatar-upload {
         display: flex;
         align-items: center;
@@ -560,7 +536,6 @@
         display: none;
       }
 
-      /* ── Review ── */
       .review-card {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -603,7 +578,6 @@
         border: 1.5px solid var(--border);
       }
 
-      /* ── API Error Banner ── */
       .api-error {
         display: none;
         align-items: center;
@@ -620,7 +594,6 @@
         display: flex;
       }
 
-      /* ── Buttons ── */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -667,7 +640,6 @@
         padding-top: 20px;
       }
 
-      /* ── Spinner ── */
       .spinner {
         width: 15px;
         height: 15px;
@@ -687,7 +659,6 @@
         }
       }
 
-      /* ── Success ── */
       .success-screen {
         display: none;
         flex-direction: column;
@@ -724,7 +695,6 @@
         line-height: 1.6;
       }
 
-      /* ── Responsive ── */
       @media (max-width: 760px) {
         .auth-card {
           grid-template-columns: 1fr;
@@ -742,7 +712,6 @@
         }
       }
 
-      /* ── Password input wrapper ── */
       .pw-wrapper {
         position: relative;
       }
@@ -766,7 +735,6 @@
         padding-right: 38px;
       }
 
-      /* ── Date input fix ── */
       input[type="date"]::-webkit-calendar-picker-indicator {
         filter: invert(0.5);
         cursor: pointer;
@@ -775,7 +743,6 @@
         color-scheme: dark;
       }
 
-      /* ── Avatar Selection Section ── */
       .avatar-selection-section {
         margin-top: 24px;
       }
@@ -804,7 +771,6 @@
         display: block;
       }
 
-      /* ── Avatar Tabs ── */
       .avatar-tabs {
         display: flex;
         gap: 8px;
@@ -832,7 +798,6 @@
         color: white;
       }
 
-      /* ── Avatar Grid ── */
       .avatar-grid-container {
         background: var(--surface);
         border: 1px solid var(--border);
@@ -843,15 +808,13 @@
         scroll-behavior: smooth;
       }
 
-      /* Hide scrollbar for Chrome, Safari and Opera */
       .avatar-grid-container::-webkit-scrollbar {
         display: none;
       }
 
-      /* Hide scrollbar for IE, Edge and Firefox */
       .avatar-grid-container {
-        -ms-overflow-style: none;  /* IE and Edge */
-        scrollbar-width: none;  /* Firefox */
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none; /* Firefox */
       }
       .avatar-grid {
         display: grid;
@@ -912,7 +875,6 @@
   </head>
   <body>
     <div class="auth-card">
-      <!-- ── LEFT PANEL ── -->
       <div class="panel-left">
         <div class="grid-lines"></div>
         <div class="logo">Sagar<span class="accent">Auth</span></div>
@@ -955,7 +917,6 @@
         </div>
       </div>
 
-      <!-- ── RIGHT PANEL ── -->
       <div class="panel-right">
         <div class="form-header">
           <h1 id="stepTitle">Basic Info</h1>
@@ -966,7 +927,6 @@
           <div class="progress-fill" id="progressFill" style="width: 25%"></div>
         </div>
 
-        <!-- API Error Banner -->
         <div class="api-error" id="apiError">
           <svg
             width="15"
@@ -983,9 +943,7 @@
           <span id="apiErrorText">Something went wrong. Please try again.</span>
         </div>
 
-        <!-- ════ STEP 1 — Basic Info ════ -->
         <div class="form-step active" id="step1">
-          <!-- Name row -->
           <div class="field-row">
             <div class="field">
               <label for="firstName"
@@ -1043,7 +1001,6 @@
             </div>
           </div>
 
-          <!-- Age and Gender row -->
           <div class="field-row">
             <div class="field">
               <label for="dob"
@@ -1095,7 +1052,6 @@
           </div>
         </div>
 
-        <!-- ════ STEP 2 — Profile Picture ════ -->
         <div class="form-step" id="step2">
           <div class="avatar-selection-section">
             <div class="avatar-selection-header">
@@ -1145,7 +1101,6 @@
           </div>
         </div>
 
-        <!-- ════ STEP 3 — Email & Password ════ -->
         <div class="form-step" id="step3">
           <div class="field">
             <label for="email"
@@ -1296,7 +1251,6 @@
           </div>
         </div>
 
-        <!-- ════ STEP 4 — Review ════ -->
         <div class="form-step" id="step4">
           <p style="font-size: 12.5px; color: var(--text-2)">
             Review your details before creating your account.
@@ -1369,7 +1323,6 @@
           </p>
         </div>
 
-        <!-- ════ SUCCESS ════ -->
         <div class="success-screen" id="successScreen">
           <div class="success-icon">✓</div>
           <h2>Account created!</h2>
@@ -1380,14 +1333,14 @@
             account.
           </p>
           <a
-            href="login.html"
+            href="login"
             class="btn btn-primary"
             style="margin-top: 8px; text-decoration: none"
+            id="goToLoginBtn"
             >Go to login →</a
           >
         </div>
 
-        <!-- ════ ACTIONS ════ -->
         <div class="actions" id="actions">
           <button class="btn btn-ghost" id="btnBack" style="display: none">
             <svg
@@ -1417,16 +1370,9 @@
           </button>
         </div>
       </div>
-      <!-- /panel-right -->
     </div>
-    <!-- /auth-card -->
 
     <script>
-      /* ═══════════════════════════════════════════════
-   Sagar Auth — Shared JS Utilities
-   ═══════════════════════════════════════════════ */
-
-      /* ── Validation helpers ── */
       const Validators = {
         required: (v) => v.trim().length > 0,
         minLen: (v, n) => v.trim().length >= n,
@@ -1451,7 +1397,6 @@
         match: (v, other) => v === other,
       };
 
-      /* ── Field error display ── */
       function setFieldError(inputId, errId, hasError) {
         const el = document.getElementById(inputId);
         const er = document.getElementById(errId);
@@ -1464,14 +1409,12 @@
         setFieldError(inputId, errId, false);
       }
 
-      /* ── Inline clear-on-input ── */
       function attachClearOnInput(inputId, errId) {
         const el = document.getElementById(inputId);
         if (!el) return;
         el.addEventListener("input", () => clearFieldError(inputId, errId));
       }
 
-      /* ── Password strength ── */
       function calcStrength(pw) {
         let score = 0;
         if (pw.length >= 8) score++;
@@ -1513,7 +1456,6 @@
         }
       }
 
-      /* ── API call helper ── */
       async function apiPost(url, payload) {
         const res = await fetch(url, {
           method: "POST",
@@ -1525,7 +1467,6 @@
         return data;
       }
 
-      /* ── Show API error banner ── */
       function showApiError(bannerId, textId, msg) {
         const b = document.getElementById(bannerId);
         const t = document.getElementById(textId);
@@ -1539,7 +1480,6 @@
         if (b) b.classList.remove("visible");
       }
 
-      /* ── Multi-step controller ── */
       class MultiStepForm {
         constructor({
           totalSteps,
@@ -1662,9 +1602,6 @@
         }
       }
 
-      /* ═══════════════════════════════════════════════
-   Avatar URLs
-   ═══════════════════════════════════════════════ */
       const commonPfpLinks = [
         "https://ik.imagekit.io/yn9gz2n2g/Avatars/Common/common153.png?updatedAt=1754971040747",
         "https://ik.imagekit.io/yn9gz2n2g/Avatars/Common/common154.png?updatedAt=1754971126428",
@@ -2078,19 +2015,11 @@
         "https://ik.imagekit.io/yn9gz2n2g/Avatars/Female/female175.png?updatedAt=1754894768522",
       ];
 
-      /* ═══════════════════════════════════════════════
-   Register Page Logic
-   ═══════════════════════════════════════════════ */
-      /* ═══════════════════════════════════════════════
-   Sagar Auth — Register Page
-   ═══════════════════════════════════════════════ */
-
       const DEFAULT_AVATAR =
         "https://ik.imagekit.io/yn9gz2n2g/Avatars/Common/common1.png?updatedAt=1750989714229";
 
       let selectedAvatarUrl = DEFAULT_AVATAR;
 
-      /* ── Init multi-step ── */
       const form = new MultiStepForm({
         totalSteps: 4,
         stepTitles: [
@@ -2113,20 +2042,17 @@
         stepListId: "stepList",
       });
 
-      /* ── Validators ── */
       form.registerValidator(1, validateStep1);
       form.registerValidator(2, validateStep2);
       form.registerValidator(3, validateStep3);
       form.registerSubmit(submitRegistration);
 
-      /* ── Avatar Selection Logic ── */
       const avatarGrid = document.getElementById("avatarGrid");
       const tabMale = document.getElementById("tabMale");
       const tabFemale = document.getElementById("tabFemale");
 
       let currentTab = "male";
 
-      // Tab switching
       tabMale.addEventListener("click", () => switchTab("male"));
       tabFemale.addEventListener("click", () => switchTab("female"));
 
@@ -2139,7 +2065,9 @@
         renderAvatars(tab);
 
         // Scroll to top of avatar grid
-        const avatarGridContainer = document.querySelector(".avatar-grid-container");
+        const avatarGridContainer = document.querySelector(
+          ".avatar-grid-container",
+        );
         if (avatarGridContainer) {
           avatarGridContainer.scrollTop = 0;
         }
@@ -2187,7 +2115,6 @@
         clearFieldError("avatar", "avatarErr");
       }
 
-      /* ── Password toggle ── */
       document
         .getElementById("togglePassword")
         .addEventListener("click", () => {
@@ -2204,14 +2131,12 @@
         inp.type = inp.type === "text" ? "password" : "text";
       });
 
-      /* ── Strength bar ── */
       document.getElementById("password").addEventListener("input", () => {
         const pw = document.getElementById("password").value;
         updateStrengthBar(pw, ["s1", "s2", "s3", "s4", "s5"], "strengthLabel");
         clearFieldError("password", "passwordErr");
       });
 
-      /* ── Clear-on-input hooks ── */
       ["firstName", "lastName"].forEach((id) =>
         attachClearOnInput(id, id + "Err"),
       );
@@ -2220,7 +2145,6 @@
       attachClearOnInput("gender", "genderErr");
       attachClearOnInput("confirmPassword", "confirmPasswordErr");
 
-      /* ── Step 1 validation: name, dob, gender ── */
       function validateStep1() {
         const fn = document.getElementById("firstName").value.trim();
         const ln = document.getElementById("lastName").value.trim();
@@ -2240,14 +2164,12 @@
         return fnOk && lnOk && dobOk && genderOk;
       }
 
-      /* ── Step 2 validation: avatar selection ── */
       function validateStep2() {
         const avatarOk = selectedAvatarUrl !== null;
         setFieldError("avatar", "avatarErr", !avatarOk);
         return avatarOk;
       }
 
-      /* ── Step 3 validation: email and password ── */
       function validateStep3() {
         const email = document.getElementById("email").value.trim();
         const pw = document.getElementById("password").value;
@@ -2264,7 +2186,6 @@
         return emailOk && pwOk && cpwOk;
       }
 
-      /* ── Build review card ── */
       function buildReview() {
         document.getElementById("avatarPreviewReview").src = selectedAvatarUrl;
         const fn = document.getElementById("firstName").value.trim();
@@ -2288,7 +2209,6 @@
         document.getElementById("reviewAvatar").textContent = "Selected avatar";
       }
 
-      /* ── Navigation ── */
       document
         .getElementById("btnNext")
         .addEventListener("click", () => form.next());
@@ -2296,7 +2216,6 @@
         .getElementById("btnBack")
         .addEventListener("click", () => form.back());
 
-      /* Override next to build review on step 4 */
       const origNext = form.next.bind(form);
       form.next = function () {
         if (this.current === 3) {
@@ -2309,7 +2228,6 @@
         }
       };
 
-      /* ── Submit ── */
       async function submitRegistration() {
         hideApiError("apiError");
         const btn = document.getElementById("btnNext");
@@ -2372,18 +2290,62 @@
         }
       }
 
-      /* ── Init ── */
       form.render();
 
-      // Pre-render avatars based on default tab (male)
       renderAvatars("male");
 
-      /* ── Date input click handler ── */
       const dobInput = document.getElementById("dob");
       if (dobInput) {
-        dobInput.addEventListener("click", function() {
+        dobInput.addEventListener("click", function () {
           this.showPicker();
         });
+      }
+
+      if (document.referrer) {
+        sessionStorage.setItem("registerReferrer", document.referrer);
+      }
+
+      const currentParams = new URLSearchParams(window.location.search);
+      if (currentParams.toString()) {
+        sessionStorage.setItem("registerParams", currentParams.toString());
+      }
+
+      const goToLoginBtn = document.getElementById("goToLoginBtn");
+      if (goToLoginBtn) {
+        const referrer = sessionStorage.getItem("registerReferrer");
+
+        if (referrer && referrer.includes("/auth/login")) {
+          goToLoginBtn.textContent = "Go to login →";
+
+          goToLoginBtn.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            try {
+              const referrerUrl = new URL(referrer);
+              const referrerParams = referrerUrl.search;
+
+              window.location.href = "login" + referrerParams;
+            } catch (e) {
+              const storedParams = sessionStorage.getItem("registerParams");
+              if (storedParams) {
+                window.location.href = "login?" + storedParams;
+              } else {
+                window.location.href = "login";
+              }
+            }
+
+            sessionStorage.removeItem("registerReferrer");
+            sessionStorage.removeItem("registerParams");
+          });
+        } else {
+          goToLoginBtn.textContent = "Done";
+          goToLoginBtn.href = "/";
+
+          goToLoginBtn.addEventListener("click", function () {
+            sessionStorage.removeItem("registerReferrer");
+            sessionStorage.removeItem("registerParams");
+          });
+        }
       }
     </script>
   </body>
